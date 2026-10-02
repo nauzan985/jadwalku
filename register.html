@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="id" id="htmlRoot">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daftar - JadwalKu</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --primary-light: #dbeafe;
+            --bg-body: #f6f7f7;
+            --bg-white: #ffffff;
+            --bg-light: #f9fafb;
+            --bg-hover: #f3f4f6;
+            --text-primary: #1e293b;
+            --text-secondary: #475569;
+            --text-muted: #94a3b8;
+            --border: #e2e8f0;
+            --border-dark: #cbd5e1;
+            --danger: #dc2626;
+            --danger-light: #fee2e2;
+            --success: #059669;
+            --success-light: #d1fae5;
+            --warning: #d97706;
+            --warning-light: #fef3c7;
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
+            --radius-sm: 4px;
+            --radius-md: 6px;
+            --radius-lg: 8px;
+            --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            background: var(--bg-body);
+            color: var(--text-primary);
+            line-height: 1.6;
+            font-size: 14px;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+        }
+
+        .register-wrap { width: 100%; max-width: 460px; }
+
+        .register-card {
+            background: var(--bg-white);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-sm);
+            padding: 36px 32px;
+        }
+
+        .brand { text-align: center; margin-bottom: 24px; }
+
+        .brand-icon {
+            width: 56px; height: 56px;
+            background: var(--primary);
+            border-radius: var(--radius-lg);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 24px;
+            margin-bottom: 16px;
+        }
+
+        .brand h1 { font-size: 22px; font-weight: 600; margin-bottom: 4px; }
+        .brand p { font-size: 13px; color: var(--text-muted); }
+
+        .alert {
+            display: none;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 14px;
+            border-radius: var(--radius-md);
+            font-size: 13px;
+            margin-bottom: 16px;
+            border-left: 3px solid var(--danger);
+            background: var(--danger-light);
+            color: var(--danger);
+        }
+        .alert.show { display: flex; }
+        .alert.success { border-left-color: var(--success); background: var(--success-light); color: var(--success); }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .form-group { margin-bottom: 14px; }
+
+        .form-label {
+            display: block;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-primary);
+            margin-bottom: 6px;
+        }
+        .form-label .required { color: var(--danger); }
+
+        .input-wrap { position: relative; }
+
+        .input-wrap > i {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 14px;
+            pointer-events: none;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 9px 12px 9px 36px;
+            background: var(--bg-white);
+            border: 1px solid var(--border-dark);
+            border-radius: var(--radius-md);
+            font-family: var(--font-sans);
+            font-size: 14px;
+            color: var(--text-primary);
+            transition: 0.15s ease-in-out;
+            outline: none;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px var(--primary-light);
+        }
+
+        .form-control::placeholder { color: var(--text-muted); }
+
+        .form-hint {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        .password-strength {
+            margin-top: 6px;
+            display: none;
+        }
+        .password-strength.show { display: block; }
+
+        .strength-bar {
+            height: 3px;
+            background: var(--border);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-bottom: 4px;
+        }
+
+        .strength-fill {
+            height: 100%;
+            width: 0%;
+            transition: 0.3s ease;
+        }
+        .strength-fill.weak { width: 25%; background: var(--danger); }
+        .strength-fill.fair { width: 50%; background: var(--warning); }
+        .strength-fill.good { width: 75%; background: var(--primary); }
+        .strength-fill.strong { width: 100%; background: var(--success); }
+
+        .strength-text { font-size: 11px; font-weight: 500; }
+        .strength-text.weak { color: var(--danger); }
+        .strength-text.fair { color: var(--warning); }
+        .strength-text.good { color: var(--primary); }
+        .strength-text.strong { color: var(--success); }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            padding: 10px 16px;
+            border: 1px solid transparent;
+            border-radius: var(--radius-md);
+            font-family: var(--font-sans);
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: 0.15s ease-in-out;
+            width: 100%;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: #fff;
+            border-color: var(--primary);
+            margin-top: 6px;
+        }
+        .btn-primary:hover { background: var(--primary-hover); border-color: var(--primary-hover); }
+
+        .divider {
+            text-align: center;
+            margin: 20px 0 16px;
+            font-size: 13px;
+            color: var(--text-muted);
+            position: relative;
+        }
+        .divider::before, .divider::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 38%;
+            height: 1px;
+            background: var(--border);
+        }
+        .divider::before { left: 0; }
+        .divider::after { right: 0; }
+
+        .footer-text { text-align: center; font-size: 13px; color: var(--text-secondary); }
+        .footer-text a { color: var(--primary); font-weight: 500; text-decoration: none; }
+        .footer-text a:hover { text-decoration: underline; }
+
+        .lang-switch {
+            position: fixed;
+            top: 16px;
+            right: 16px;
+            display: flex;
+            gap: 4px;
+            background: var(--bg-white);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 2px;
+        }
+        .lang-switch button {
+            padding: 5px 10px;
+            border: none;
+            background: transparent;
+            font-family: var(--font-sans);
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: 0.15s ease-in-out;
+        }
+        .lang-switch button.active { background: var(--primary); color: #fff; }
+
+        @media (max-width: 480px) {
+            .register-card { padding: 28px 20px; }
+            .form-row { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="lang-switch">
+        <button type="button" id="langId" class="active" onclick="setLang('id')">ID</button>
+        <button type="button" id="langEn" onclick="setLang('en')">EN</button>
+    </div>
+
+    <div class="register-wrap">
+        <div class="register-card">
+            <div class="brand">
+                <div class="brand-icon"><i class="fas fa-calendar-alt"></i></div>
+                <h1 data-i18n="appName">JadwalKu</h1>
+                <p data-i18n="appTagline">Aplikasi Jadwal Pelajaran Siswa</p>
+            </div>
+
+            <div class="alert" id="alertBox">
+                <i class="fas fa-exclamation-circle"></i>
+                <span id="alertText">Terjadi kesalahan</span>
+            </div>
+
+            <form id="registerForm" onsubmit="handleRegister(event)">
+                <div class="form-group">
+                    <label class="form-label"><span data-i18n="fullName">Nama Lengkap</span> <span class="required">*</span></label>
+                    <div class="input-wrap">
+                        <i class="fas fa-user"></i>
+                        <input type="text" class="form-control" id="name" placeholder="Contoh: Budi Santoso" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label"><span data-i18n="username">Username</span> <span class="required">*</span></label>
+                    <div class="input-wrap">
+                        <i class="fas fa-at"></i>
+                        <input type="text" class="form-control" id="username" placeholder="Contoh: budi123" required minlength="3">
+                    </div>
+                    <div class="form-hint" data-i18n="usernameHint">Minimal 3 karakter, tanpa spasi</div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label"><span data-i18n="password">Password</span> <span class="required">*</span></label>
+                    <div class="input-wrap">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" class="form-control" id="password" placeholder="Minimal 4 karakter" required minlength="4" oninput="checkStrength(this.value)">
+                    </div>
+                    <div class="password-strength" id="strengthWrap">
+                        <div class="strength-bar">
+                            <div class="strength-fill" id="strengthFill"></div>
+                        </div>
+                        <div class="strength-text" id="strengthText">Kekuatan: -</div>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label"><span data-i18n="class">Kelas</span> <span class="required">*</span></label>
+                        <div class="input-wrap">
+                            <i class="fas fa-school"></i>
+                            <input type="text" class="form-control" id="kelas" placeholder="XI IPA 1" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" data-i18n="schoolYear">Tahun Ajaran</label>
+                        <div class="input-wrap">
+                            <i class="fas fa-calendar"></i>
+                            <input type="text" class="form-control" id="tahun" placeholder="2024/2025">
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-user-plus"></i>
+                    <span data-i18n="registerBtn">Daftar Sekarang</span>
+                </button>
+            </form>
+
+            <div class="divider" data-i18n="or">atau</div>
+
+            <div class="footer-text">
+                <span data-i18n="haveAccount">Sudah punya akun?</span>
+                <a href="login.html" data-i18n="loginNow">Masuk sekarang</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const I18N = {
+            id: {
+                appName: 'JadwalKu',
+                appTagline: 'Aplikasi Jadwal Pelajaran Siswa',
+                fullName: 'Nama Lengkap',
+                username: 'Username',
+                password: 'Password',
+                class: 'Kelas',
+                schoolYear: 'Tahun Ajaran',
+                registerBtn: 'Daftar Sekarang',
+                or: 'atau',
+                haveAccount: 'Sudah punya akun?',
+                loginNow: 'Masuk sekarang',
+                usernameHint: 'Minimal 3 karakter, tanpa spasi',
+                errorEmpty: 'Semua field wajib diisi!',
+                errorUsername: 'Username minimal 3 karakter!',
+                errorPassword: 'Password minimal 4 karakter!',
+                errorExists: 'Username sudah digunakan!',
+                successRegister: 'Registrasi berhasil! Mengalihkan...',
+                strengthWeak: 'Lemah',
+                strengthFair: 'Cukup',
+                strengthGood: 'Baik',
+                strengthStrong: 'Kuat'
+            },
+            en: {
+                appName: 'JadwalKu',
+                appTagline: 'Student Schedule Application',
+                fullName: 'Full Name',
+                username: 'Username',
+                password: 'Password',
+                class: 'Class',
+                schoolYear: 'School Year',
+                registerBtn: 'Register Now',
+                or: 'or',
+                haveAccount: 'Already have an account?',
+                loginNow: 'Login now',
+                usernameHint: 'Min 3 characters, no spaces',
+                errorEmpty: 'All fields are required!',
+                errorUsername: 'Username must be at least 3 characters!',
+                errorPassword: 'Password must be at least 4 characters!',
+                errorExists: 'Username already taken!',
+                successRegister: 'Registration successful! Redirecting...',
+                strengthWeak: 'Weak',
+                strengthFair: 'Fair',
+                strengthGood: 'Good',
+                strengthStrong: 'Strong'
+            }
+        };
+
+        let currentLang = localStorage.getItem('jadwalku_lang') || 'id';
+
+        function t(key) { return I18N[currentLang][key] || key; }
+
+        function setLang(lang) {
+            currentLang = lang;
+            localStorage.setItem('jadwalku_lang', lang);
+            document.getElementById('langId').classList.toggle('active', lang === 'id');
+            document.getElementById('langEn').classList.toggle('active', lang === 'en');
+            applyI18n();
+        }
+
+        function applyI18n() {
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                el.textContent = t(key);
+            });
+        }
+
+        function showAlert(msg, type = 'error') {
+            const box = document.getElementById('alertBox');
+            document.getElementById('alertText').textContent = msg;
+            box.classList.add('show');
+            box.classList.toggle('success', type === 'success');
+            if (type !== 'success') setTimeout(() => box.classList.remove('show'), 4000);
+        }
+
+        function checkStrength(password) {
+            const wrap = document.getElementById('strengthWrap');
+            const fill = document.getElementById('strengthFill');
+            const text = document.getElementById('strengthText');
+
+            if (!password) { wrap.classList.remove('show'); return; }
+            wrap.classList.add('show');
+
+            let score = 0;
+            if (password.length >= 4) score++;
+            if (password.length >= 8) score++;
+            if (/[a-z]/.test(password) && /[A-Z]/.test(password)) score++;
+            if (/[0-9]/.test(password)) score++;
+            if (/[^a-zA-Z0-9]/.test(password)) score++;
+
+            let level = 'weak';
+            if (score >= 5) level = 'strong';
+            else if (score >= 3) level = 'good';
+            else if (score >= 2) level = 'fair';
+
+            fill.className = 'strength-fill ' + level;
+            text.className = 'strength-text ' + level;
+            text.textContent = 'Kekuatan: ' + t('strength' + level.charAt(0).toUpperCase() + level.slice(1));
+        }
+
+        function handleRegister(e) {
+            e.preventDefault();
+
+            const name = document.getElementById('name').value.trim();
+            const username = document.getElementById('username').value.trim().toLowerCase();
+            const password = document.getElementById('password').value;
+            const kelas = document.getElementById('kelas').value.trim();
+            const tahun = document.getElementById('tahun').value.trim();
+
+            if (!name || !username || !password || !kelas) {
+                showAlert(t('errorEmpty'));
+                return;
+            }
+            if (username.length < 3 || /\s/.test(username)) {
+                showAlert(t('errorUsername'));
+                return;
+            }
+            if (password.length < 4) {
+                showAlert(t('errorPassword'));
+                return;
+            }
+
+            const users = JSON.parse(localStorage.getItem('jadwalku_users') || '[]');
+            if (users.find(u => u.username === username)) {
+                showAlert(t('errorExists'));
+                return;
+            }
+
+            const newUser = {
+                username,
+                password,
+                name,
+                kelas,
+                tahun: tahun || '2024/2025',
+                avatarIndex: Math.floor(Math.random() * 6),
+                createdAt: new Date().toISOString()
+            };
+
+            users.push(newUser);
+            localStorage.setItem('jadwalku_users', JSON.stringify(users));
+            localStorage.setItem('jadwalku_session', username);
+
+            showAlert(t('successRegister'), 'success');
+            setTimeout(() => { window.location.href = 'index.html'; }, 1000);
+        }
+
+        setLang(currentLang);
+    </script>
+</body>
+</html>
