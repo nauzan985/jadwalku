@@ -1890,6 +1890,9 @@ body.dark-mode .wp-dash-piket-badge {
     box-shadow: 0 25px 60px rgba(0,0,0,0.25);
     animation: wpModalIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
+.wp-modal.wp-modal-lg {
+    max-width: 720px;
+}
 @keyframes wpModalIn {
     from { opacity: 0; transform: translateY(-20px) scale(0.96); }
     to { opacity: 1; transform: translateY(0) scale(1); }
@@ -2009,6 +2012,626 @@ body.dark-mode .wp-dash-piket-badge {
     border-color: var(--primary);
     transform: translateY(-1px);
 }
+
+/* AUTOCOMPLETE */
+.wp-autocomplete-wrap {
+    position: relative;
+    width: 100%;
+}
+.wp-autocomplete-input-wrap { position: relative; }
+.wp-autocomplete-icon {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-muted);
+    font-size: 13px;
+    pointer-events: none;
+    transition: color 0.2s ease;
+    z-index: 2;
+}
+.wp-autocomplete-input-wrap:focus-within .wp-autocomplete-icon { color: var(--primary); }
+.wp-autocomplete-wrap .wp-input { padding-left: 38px; padding-right: 40px; }
+.wp-autocomplete-toggle {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 26px;
+    height: 26px;
+    background: transparent;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    color: var(--text-muted);
+    font-size: 11px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    z-index: 2;
+}
+.wp-autocomplete-toggle:hover { background: var(--primary-light); color: var(--primary); }
+.wp-autocomplete-toggle.open { transform: translateY(-50%) rotate(180deg); background: var(--primary-light); color: var(--primary); }
+.wp-autocomplete-dropdown {
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    right: 0;
+    background: var(--white);
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    box-shadow: 0 16px 40px rgba(0,0,0,0.14), 0 4px 12px rgba(79,70,229,0.08);
+    max-height: 280px;
+    overflow-y: auto;
+    z-index: 100;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-8px);
+    transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+    scrollbar-width: thin;
+}
+.wp-autocomplete-dropdown.show { opacity: 1; visibility: visible; transform: translateY(0); }
+.wp-autocomplete-dropdown::-webkit-scrollbar { width: 6px; }
+.wp-autocomplete-dropdown::-webkit-scrollbar-thumb { background: var(--gray-300); border-radius: 3px; }
+.wp-autocomplete-header {
+    padding: 10px 14px 8px;
+    font-size: 10px;
+    font-weight: 800;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+    background: var(--gray-50);
+    border-radius: 12px 12px 0 0;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+.wp-autocomplete-header-count {
+    background: var(--primary-light);
+    color: var(--primary);
+    padding: 1px 7px;
+    border-radius: 50px;
+    font-size: 9.5px;
+    font-weight: 800;
+}
+.wp-autocomplete-list { padding: 6px; }
+.wp-autocomplete-item {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    padding: 9px 11px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    position: relative;
+    border: 1.5px solid transparent;
+}
+.wp-autocomplete-item:hover,
+.wp-autocomplete-item.highlight {
+    background: linear-gradient(135deg, var(--primary-light), var(--purple-light));
+    border-color: rgba(79,70,229,0.15);
+    transform: translateX(3px);
+}
+.wp-autocomplete-item.selected {
+    background: linear-gradient(135deg, var(--primary-light), var(--purple-light));
+    border-color: var(--primary);
+}
+.wp-autocomplete-item.selected::after {
+    content: '\f00c';
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
+    position: absolute;
+    right: 12px;
+    color: var(--primary);
+    font-size: 12px;
+}
+.wp-autocomplete-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 800;
+    flex-shrink: 0;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+    letter-spacing: -0.5px;
+}
+.wp-autocomplete-avatar.subject { background: linear-gradient(135deg, #4f46e5, #a855f7); }
+.wp-autocomplete-avatar.teacher { background: linear-gradient(135deg, #10b981, #06b6d4); }
+.wp-autocomplete-info { flex: 1; min-width: 0; }
+.wp-autocomplete-name {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 1px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.wp-autocomplete-name mark {
+    background: linear-gradient(135deg, rgba(79,70,229,0.2), rgba(168,85,247,0.2));
+    color: var(--primary-dark);
+    border-radius: 3px;
+    padding: 0 2px;
+    font-weight: 800;
+}
+.wp-autocomplete-meta {
+    font-size: 10.5px;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 500;
+}
+.wp-autocomplete-meta-item { display: inline-flex; align-items: center; gap: 3px; }
+.wp-autocomplete-meta-item i { font-size: 9px; color: var(--primary); opacity: 0.7; }
+.wp-autocomplete-usage {
+    font-size: 9.5px;
+    font-weight: 800;
+    color: var(--primary);
+    background: var(--primary-light);
+    padding: 2px 7px;
+    border-radius: 50px;
+    flex-shrink: 0;
+    letter-spacing: 0.3px;
+}
+.wp-autocomplete-add {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    padding: 10px 11px;
+    margin: 4px 6px 6px;
+    background: linear-gradient(135deg, rgba(79,70,229,0.06), rgba(168,85,247,0.06));
+    border: 1.5px dashed rgba(79,70,229,0.35);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: var(--font-sans);
+    text-align: left;
+    width: calc(100% - 12px);
+}
+.wp-autocomplete-add:hover {
+    background: linear-gradient(135deg, var(--primary-light), var(--purple-light));
+    border-color: var(--primary);
+    border-style: solid;
+    transform: translateX(3px);
+}
+.wp-autocomplete-add-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #4f46e5, #a855f7);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    flex-shrink: 0;
+    box-shadow: 0 3px 8px rgba(79,70,229,0.3);
+}
+.wp-autocomplete-add-text { flex: 1; min-width: 0; }
+.wp-autocomplete-add-title { font-size: 12.5px; font-weight: 700; color: var(--primary); margin-bottom: 1px; }
+.wp-autocomplete-add-desc { font-size: 10.5px; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.wp-autocomplete-empty { padding: 24px 16px; text-align: center; color: var(--text-muted); font-size: 12px; }
+.wp-autocomplete-empty i {
+    display: block;
+    font-size: 32px;
+    margin-bottom: 8px;
+    opacity: 0.3;
+    color: var(--primary);
+}
+
+/* MASTER DATA MANAGER */
+.wp-master-stats {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-bottom: 18px;
+}
+.wp-master-stat {
+    background: linear-gradient(135deg, var(--gray-50), var(--white));
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: all 0.25s ease;
+}
+.wp-master-stat:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+    border-color: transparent;
+}
+.wp-master-stat-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 16px;
+    flex-shrink: 0;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+.wp-master-stat-icon.subject { background: linear-gradient(135deg, #4f46e5, #a855f7); }
+.wp-master-stat-icon.teacher { background: linear-gradient(135deg, #10b981, #06b6d4); }
+.wp-master-stat-info { flex: 1; min-width: 0; }
+.wp-master-stat-value {
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--text);
+    line-height: 1;
+    margin-bottom: 3px;
+    letter-spacing: -0.5px;
+}
+.wp-master-stat-label {
+    font-size: 10.5px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 700;
+}
+.wp-master-list {
+    display: grid;
+    gap: 8px;
+    max-height: 500px;
+    overflow-y: auto;
+    padding-right: 4px;
+}
+.wp-master-list::-webkit-scrollbar { width: 6px; }
+.wp-master-list::-webkit-scrollbar-thumb { background: var(--gray-300); border-radius: 3px; }
+.wp-master-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 11px 14px;
+    background: var(--gray-50);
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    transition: all 0.2s ease;
+    animation: masterItemIn 0.4s ease both;
+}
+.wp-master-item:hover {
+    background: var(--white);
+    border-color: var(--primary);
+    transform: translateX(4px);
+    box-shadow: 0 6px 16px rgba(79,70,229,0.12);
+}
+@keyframes masterItemIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+.wp-master-item-icon {
+    width: 34px;
+    height: 34px;
+    border-radius: 9px;
+    background: linear-gradient(135deg, #4f46e5, #a855f7);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 800;
+    flex-shrink: 0;
+    box-shadow: 0 4px 10px rgba(79,70,229,0.3);
+}
+.wp-master-item-icon.teacher { background: linear-gradient(135deg, #10b981, #06b6d4); }
+.wp-master-item-info { flex: 1; min-width: 0; }
+.wp-master-item-name {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.wp-master-item-meta {
+    font-size: 10.5px;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 500;
+}
+.wp-master-item-meta i {
+    font-size: 9.5px;
+    color: var(--primary);
+    opacity: 0.7;
+    margin-right: 3px;
+}
+.wp-master-item-actions { display: flex; gap: 5px; opacity: 0; transition: opacity 0.2s ease; }
+.wp-master-item:hover .wp-master-item-actions { opacity: 1; }
+
+.wp-master-form-preview {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px;
+    background: linear-gradient(135deg, var(--primary-light), var(--purple-light));
+    border: 1.5px solid rgba(79,70,229,0.2);
+    border-radius: 12px;
+    margin-bottom: 20px;
+    position: relative;
+    overflow: hidden;
+    animation: masterPreviewIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes masterPreviewIn {
+    from { opacity: 0; transform: scale(0.94); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+.wp-master-form-preview::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -20%;
+    width: 180px;
+    height: 180px;
+    background: radial-gradient(circle, rgba(147,51,234,0.15), transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
+}
+
+.wp-master-form-avatar {
+    width: 64px;
+    height: 64px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, #4f46e5, #a855f7);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+    font-weight: 800;
+    flex-shrink: 0;
+    box-shadow: 0 8px 20px rgba(79,70,229,0.35);
+    position: relative;
+    z-index: 1;
+    transition: transform 0.3s ease;
+    letter-spacing: -1px;
+}
+
+.wp-master-form-avatar.teacher {
+    background: linear-gradient(135deg, #10b981, #06b6d4);
+    box-shadow: 0 8px 20px rgba(16,185,129,0.35);
+}
+
+.wp-master-form-avatar:hover {
+    transform: scale(1.08) rotate(-3deg);
+}
+
+.wp-master-form-preview-info {
+    flex: 1;
+    min-width: 0;
+    position: relative;
+    z-index: 1;
+}
+
+.wp-master-form-preview-title {
+    font-size: 16px;
+    font-weight: 800;
+    color: var(--text);
+    margin-bottom: 4px;
+    letter-spacing: -0.3px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.wp-master-form-preview-sub {
+    font-size: 11.5px;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+    flex-wrap: wrap;
+}
+
+.wp-master-form-preview-sub-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.wp-master-form-preview-sub-item i {
+    font-size: 10px;
+    color: var(--primary);
+    opacity: 0.8;
+}
+
+.wp-master-form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+}
+
+.wp-master-form-grid .wp-form-group.full {
+    grid-column: 1 / -1;
+}
+
+@media (max-width: 600px) {
+    .wp-master-form-grid { grid-template-columns: 1fr; }
+}
+
+.wp-master-icon-picker {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.wp-master-icon-option {
+    width: 38px;
+    height: 38px;
+    border: 1.5px solid var(--border);
+    border-radius: 9px;
+    background: var(--white);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+    font-size: 15px;
+    transition: all 0.2s ease;
+}
+
+.wp-master-icon-option:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+    transform: translateY(-2px);
+}
+
+.wp-master-icon-option.selected {
+    border-color: var(--primary);
+    background: linear-gradient(135deg, var(--primary-light), var(--purple-light));
+    color: var(--primary);
+    box-shadow: 0 0 0 3px var(--primary-light);
+    transform: scale(1.05);
+}
+
+.wp-master-link-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 8px;
+    padding: 10px;
+    background: var(--gray-50);
+    border: 1.5px dashed var(--border);
+    border-radius: 10px;
+    min-height: 48px;
+}
+
+.wp-master-link-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 10px;
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 50px;
+    font-size: 11.5px;
+    font-weight: 700;
+    color: var(--text-light);
+    transition: all 0.2s ease;
+}
+
+.wp-master-link-chip:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+    transform: translateY(-1px);
+}
+
+.wp-master-link-chip-remove {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    padding: 0;
+    font-size: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    transition: all 0.15s ease;
+}
+
+.wp-master-link-chip-remove:hover {
+    background: var(--red-light);
+    color: var(--red);
+}
+
+.wp-master-link-add {
+    padding: 5px 12px;
+    background: transparent;
+    border: 1.5px dashed var(--border-dark);
+    border-radius: 50px;
+    font-family: var(--font-sans);
+    font-size: 11.5px;
+    font-weight: 700;
+    color: var(--text-muted);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    transition: all 0.2s ease;
+}
+
+.wp-master-link-add:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+    background: var(--primary-light);
+    border-style: solid;
+}
+
+.wp-master-link-select {
+    padding: 6px 10px;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    background: var(--white);
+    font-family: var(--font-sans);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text);
+    cursor: pointer;
+    outline: none;
+    transition: all 0.2s ease;
+    min-width: 140px;
+}
+
+.wp-master-link-select:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px var(--primary-light);
+}
+
+.wp-master-item-name-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.wp-master-item-tag-list {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+    margin-top: 6px;
+}
+
+.wp-master-item-tag {
+    font-size: 9.5px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 50px;
+    background: var(--gray-100);
+    color: var(--text-muted);
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    letter-spacing: 0.2px;
+}
+
+.wp-master-item-tag i { font-size: 9px; }
+
+.wp-master-item-tag.blue { background: var(--primary-light); color: var(--primary-dark); }
+.wp-master-item-tag.green { background: var(--green-light); color: #047857; }
+.wp-master-item-tag.orange { background: var(--orange-light); color: #b45309; }
+.wp-master-item-tag.purple { background: var(--purple-light); color: var(--purple); }
+.wp-master-item-tag.cyan { background: var(--cyan-light); color: #0e7490; }
 
 /* SETTINGS */
 .wp-settings-section { padding: 16px 0; border-bottom: 1px solid var(--border); }
@@ -2286,6 +2909,7 @@ body.dark-mode .wp-dash-piket-badge {
     .wp-dash-piket-name { font-size: 13px; }
     .wp-dash-piket-task { font-size: 11px; }
     .wp-dash-piket-header, .wp-dash-piket-body { padding-left: 16px; padding-right: 16px; }
+    .wp-master-stats { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 480px) {
@@ -2351,6 +2975,16 @@ body.dark-mode .wp-dash-piket-badge {
                 <span class="wp-nav-count" id="navTaskCount">0</span>
             </a>
 
+            <div class="wp-nav-section" data-i18n="navSectionMaster">Master Data</div>
+            <a class="wp-nav-item" data-page="master_mapel" onclick="goToPage('master_mapel')">
+                <i class="fas fa-book"></i><span>Data Mapel</span>
+                <span class="wp-nav-count" id="navMasterMapelCount">0</span>
+            </a>
+            <a class="wp-nav-item" data-page="master_guru" onclick="goToPage('master_guru')">
+                <i class="fas fa-chalkboard-teacher"></i><span>Data Guru</span>
+                <span class="wp-nav-count" id="navMasterGuruCount">0</span>
+            </a>
+
             <div class="wp-nav-section" data-i18n="navSectionAccount">Akun</div>
             <a class="wp-nav-item" onclick="openProfile()">
                 <i class="fas fa-user-circle"></i><span data-i18n="editProfile">Edit Profil</span>
@@ -2364,7 +2998,7 @@ body.dark-mode .wp-dash-piket-badge {
         </nav>
 
         <div class="wp-sidebar-footer">
-            <div>JadwalKu v2.0</div>
+            <div>JadwalKu v2.2</div>
             <div style="margin-top:4px;">© 2024 · <a onclick="goToPage('bantuan')">Bantuan</a></div>
         </div>
     </aside>
@@ -2519,7 +3153,6 @@ body.dark-mode .wp-dash-piket-badge {
                     </div>
                 </div>
 
-                <!-- PIKET HARI INI -->
                 <div class="wp-dash-piket" id="dashPiketCard">
                     <div class="wp-dash-piket-header">
                         <div class="wp-dash-piket-title">
@@ -2531,9 +3164,7 @@ body.dark-mode .wp-dash-piket-badge {
                             <span>-</span>
                         </div>
                     </div>
-                    <div class="wp-dash-piket-body" id="dashPiketBody">
-                        <!-- Diisi oleh JavaScript -->
-                    </div>
+                    <div class="wp-dash-piket-body" id="dashPiketBody"></div>
                 </div>
             </div>
 
@@ -2616,6 +3247,92 @@ body.dark-mode .wp-dash-piket-badge {
                         </thead>
                         <tbody id="scheduleList"></tbody>
                     </table>
+                </div>
+            </div>
+
+            <!-- MASTER MAPEL -->
+            <div class="view" id="view-master_mapel">
+                <div class="wp-page-header">
+                    <div>
+                        <h1 class="wp-page-title">Data Master Mata Pelajaran</h1>
+                        <p class="wp-page-subtitle">Kelola daftar mapel — tambah, edit, atau hapus</p>
+                    </div>
+                    <button class="wp-btn wp-btn-primary" onclick="openMasterAdd('subject')">
+                        <i class="fas fa-plus"></i><span>Tambah Mapel</span>
+                    </button>
+                </div>
+
+                <div class="wp-master-stats">
+                    <div class="wp-master-stat">
+                        <div class="wp-master-stat-icon subject"><i class="fas fa-book"></i></div>
+                        <div class="wp-master-stat-info">
+                            <div class="wp-master-stat-value" id="masterMapelTotal">0</div>
+                            <div class="wp-master-stat-label">Total Mata Pelajaran</div>
+                        </div>
+                    </div>
+                    <div class="wp-master-stat">
+                        <div class="wp-master-stat-icon teacher"><i class="fas fa-chalkboard-teacher"></i></div>
+                        <div class="wp-master-stat-info">
+                            <div class="wp-master-stat-value" id="masterGuruTotal">0</div>
+                            <div class="wp-master-stat-label">Total Guru</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="wp-card">
+                    <div class="wp-card-header">
+                        <div class="wp-card-title">
+                            <i class="fas fa-book"></i>
+                            <span>Daftar Mata Pelajaran</span>
+                        </div>
+                        <span style="font-size:11.5px;color:var(--text-muted);font-weight:600;" id="masterMapelUsageTotal">Total penggunaan: 0</span>
+                    </div>
+                    <div class="wp-card-body">
+                        <div id="masterMapelList" class="wp-master-list"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MASTER GURU -->
+            <div class="view" id="view-master_guru">
+                <div class="wp-page-header">
+                    <div>
+                        <h1 class="wp-page-title">Data Master Guru</h1>
+                        <p class="wp-page-subtitle">Kelola daftar guru — tambah, edit, atau hapus</p>
+                    </div>
+                    <button class="wp-btn wp-btn-primary" onclick="openMasterAdd('teacher')">
+                        <i class="fas fa-plus"></i><span>Tambah Guru</span>
+                    </button>
+                </div>
+
+                <div class="wp-master-stats">
+                    <div class="wp-master-stat">
+                        <div class="wp-master-stat-icon subject"><i class="fas fa-book"></i></div>
+                        <div class="wp-master-stat-info">
+                            <div class="wp-master-stat-value" id="masterMapelTotal2">0</div>
+                            <div class="wp-master-stat-label">Total Mata Pelajaran</div>
+                        </div>
+                    </div>
+                    <div class="wp-master-stat">
+                        <div class="wp-master-stat-icon teacher"><i class="fas fa-chalkboard-teacher"></i></div>
+                        <div class="wp-master-stat-info">
+                            <div class="wp-master-stat-value" id="masterGuruTotal2">0</div>
+                            <div class="wp-master-stat-label">Total Guru</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="wp-card">
+                    <div class="wp-card-header">
+                        <div class="wp-card-title">
+                            <i class="fas fa-chalkboard-teacher"></i>
+                            <span>Daftar Guru / Pembina</span>
+                        </div>
+                        <span style="font-size:11.5px;color:var(--text-muted);font-weight:600;" id="masterGuruUsageTotal">Total penggunaan: 0</span>
+                    </div>
+                    <div class="wp-card-body">
+                        <div id="masterGuruList" class="wp-master-list"></div>
+                    </div>
                 </div>
             </div>
 
@@ -2724,20 +3441,16 @@ body.dark-mode .wp-dash-piket-badge {
                     <div class="wp-card-body">
                         <div style="display:grid;gap:18px;">
                             <div>
-                                <div style="font-weight:700;color:var(--text);margin-bottom:6px;font-size:14px;">Bagaimana cara menambah jadwal?</div>
-                                <div style="color:var(--text-muted);font-size:13px;line-height:1.6;">Buka <strong>Jadwal Pelajaran</strong>, lalu klik tombol <strong>Tambah Jadwal</strong> di kanan atas.</div>
+                                <div style="font-weight:700;color:var(--text);margin-bottom:6px;font-size:14px;">Bagaimana cara menambah mapel & guru secara mandiri?</div>
+                                <div style="color:var(--text-muted);font-size:13px;line-height:1.6;">Buka menu <strong>Data Mapel</strong> atau <strong>Data Guru</strong> di sidebar, lalu klik tombol <strong>Tambah</strong>. Data akan otomatis tersimpan permanen.</div>
                             </div>
                             <div>
-                                <div style="font-weight:700;color:var(--text);margin-bottom:6px;font-size:14px;">Apakah data saya tersimpan otomatis?</div>
-                                <div style="color:var(--text-muted);font-size:13px;line-height:1.6;">Ya, semua perubahan tersimpan otomatis di browser Anda.</div>
+                                <div style="font-weight:700;color:var(--text);margin-bottom:6px;font-size:14px;">Bagaimana cara menghubungkan mapel dengan guru?</div>
+                                <div style="color:var(--text-muted);font-size:13px;line-height:1.6;">Saat menambah/edit mapel, gunakan bagian <strong>Guru Pengampu</strong> untuk memilih guru dari daftar. Anda juga bisa menambah guru baru langsung dari sana.</div>
                             </div>
                             <div>
-                                <div style="font-weight:700;color:var(--text);margin-bottom:6px;font-size:14px;">Bagaimana cara mengubah tema?</div>
-                                <div style="color:var(--text-muted);font-size:13px;line-height:1.6;">Klik ikon <i class="fas fa-moon"></i> di top bar, atau buka <strong>Pengaturan</strong>.</div>
-                            </div>
-                            <div>
-                                <div style="font-weight:700;color:var(--text);margin-bottom:6px;font-size:14px;">Bagaimana cara ekspor data?</div>
-                                <div style="color:var(--text-muted);font-size:13px;line-height:1.6;">Klik ikon <i class="fas fa-download"></i> di top bar untuk mengunduh jadwal dalam format CSV.</div>
+                                <div style="font-weight:700;color:var(--text);margin-bottom:6px;font-size:14px;">Apakah mapel & guru otomatis tersimpan?</div>
+                                <div style="color:var(--text-muted);font-size:13px;line-height:1.6;">Ya. Setiap kali Anda menyimpan jadwal pelajaran, nama mapel dan guru otomatis tersimpan ke master data dan tetap ada saat refresh.</div>
                             </div>
                         </div>
                     </div>
@@ -2760,7 +3473,7 @@ body.dark-mode .wp-dash-piket-badge {
                     <a class="wp-footer-link" onclick="goToPage('bantuan')"><i class="fas fa-question-circle"></i> Bantuan</a>
                     <a class="wp-footer-link" onclick="openSettings()"><i class="fas fa-cog"></i> Pengaturan</a>
                     <div class="wp-footer-version">
-                        <span class="wp-footer-version-dot"></span> v2.0
+                        <span class="wp-footer-version-dot"></span> v2.2
                     </div>
                 </div>
             </div>
@@ -2804,20 +3517,34 @@ body.dark-mode .wp-dash-piket-badge {
                         <input type="text" class="wp-input" id="fWaktu" placeholder="07:00 - 07:45">
                     </div>
                 </div>
+
                 <div class="wp-form-group">
-                    <label class="wp-form-label"><span data-i18n="formMapel">Nama Pelajaran</span> <span class="req">*</span></label>
-                    <input type="text" class="wp-input" id="fMapel" placeholder="Contoh: Matematika" required>
-                    <div class="wp-quick-fill">
+                    <label class="wp-form-label">
+                        <span data-i18n="formMapel">Nama Pelajaran</span> <span class="req">*</span>
+                        <span style="font-size:10.5px;color:var(--text-muted);font-weight:600;margin-left:6px;">
+                            <i class="fas fa-magic" style="color:var(--primary);"></i> Otomatis tersimpan
+                        </span>
+                    </label>
+                    <div class="wp-autocomplete-wrap" id="mapelAutocomplete">
+                        <div class="wp-autocomplete-input-wrap">
+                            <i class="fas fa-book wp-autocomplete-icon"></i>
+                            <input type="text" class="wp-input" id="fMapel" placeholder="Ketik atau pilih mapel..." required autocomplete="off">
+                            <button type="button" class="wp-autocomplete-toggle" onclick="toggleAutocomplete('mapel')" tabindex="-1">
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
+                        </div>
+                        <div class="wp-autocomplete-dropdown" id="mapelDropdown"></div>
+                    </div>
+                    <div class="wp-quick-fill" style="margin-top:8px;">
                         <button type="button" onclick="quickFill('Matematika')">Matematika</button>
                         <button type="button" onclick="quickFill('B. Indonesia')">B. Indonesia</button>
                         <button type="button" onclick="quickFill('B. Inggris')">B. Inggris</button>
                         <button type="button" onclick="quickFill('IPA')">IPA</button>
                         <button type="button" onclick="quickFill('IPS')">IPS</button>
                         <button type="button" onclick="quickFill('PKN')">PKN</button>
-                        <button type="button" onclick="quickFill('Seni Budaya')">Seni Budaya</button>
-                        <button type="button" onclick="quickFill('PJOK')">PJOK</button>
                     </div>
                 </div>
+
                 <div class="wp-form-group">
                     <label class="wp-form-label"><span data-i18n="formKategori">Kategori</span> <span class="req">*</span></label>
                     <div class="wp-cat-picker">
@@ -2843,10 +3570,26 @@ body.dark-mode .wp-dash-piket-badge {
                         </label>
                     </div>
                 </div>
+
                 <div class="wp-form-group">
-                    <label class="wp-form-label" data-i18n="formGuru">Guru / Pembina</label>
-                    <input type="text" class="wp-input" id="fGuru" placeholder="Nama guru (opsional)">
+                    <label class="wp-form-label">
+                        <span data-i18n="formGuru">Guru / Pembina</span>
+                        <span style="font-size:10.5px;color:var(--text-muted);font-weight:600;margin-left:6px;">
+                            <i class="fas fa-magic" style="color:var(--green);"></i> Otomatis tersimpan
+                        </span>
+                    </label>
+                    <div class="wp-autocomplete-wrap" id="guruAutocomplete">
+                        <div class="wp-autocomplete-input-wrap">
+                            <i class="fas fa-chalkboard-teacher wp-autocomplete-icon"></i>
+                            <input type="text" class="wp-input" id="fGuru" placeholder="Ketik atau pilih guru..." autocomplete="off">
+                            <button type="button" class="wp-autocomplete-toggle" onclick="toggleAutocomplete('guru')" tabindex="-1">
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
+                        </div>
+                        <div class="wp-autocomplete-dropdown" id="guruDropdown"></div>
+                    </div>
                 </div>
+
                 <div class="wp-form-group">
                     <label class="wp-form-label" data-i18n="formCatatan">Catatan</label>
                     <input type="text" class="wp-input" id="fCatatan" placeholder="Catatan (opsional)">
@@ -2857,6 +3600,85 @@ body.dark-mode .wp-dash-piket-badge {
             <button class="wp-btn wp-btn-ghost" onclick="closeModal()" data-i18n="cancel">Batal</button>
             <button class="wp-btn wp-btn-primary" onclick="saveSchedule(event)">
                 <i class="fas fa-save"></i><span id="saveBtnText" data-i18n="save">Simpan</span>
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL: MASTER ADD/EDIT -->
+<div class="wp-modal-overlay" id="masterOverlay">
+    <div class="wp-modal wp-modal-lg">
+        <div class="wp-modal-header">
+            <h3 class="wp-modal-title" id="masterModalTitle">Tambah Data</h3>
+            <button class="wp-modal-close" onclick="closeMaster()"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="wp-modal-body">
+
+            <div class="wp-master-form-preview" id="masterPreview">
+                <div class="wp-master-form-avatar" id="masterPreviewAvatar">?</div>
+                <div class="wp-master-form-preview-info">
+                    <div class="wp-master-form-preview-title" id="masterPreviewTitle">Data Baru</div>
+                    <div class="wp-master-form-preview-sub" id="masterPreviewSub">
+                        <span class="wp-master-form-preview-sub-item"><i class="fas fa-info-circle"></i>Isi form di bawah</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="wp-master-form-grid">
+                <div class="wp-form-group full">
+                    <label class="wp-form-label" id="masterLabelName">
+                        Nama <span class="req">*</span>
+                    </label>
+                    <input type="text" class="wp-input" id="masterName" placeholder="Masukkan nama..." oninput="updateMasterPreview()">
+                </div>
+
+                <div class="wp-form-group" id="masterCodeGroup">
+                    <label class="wp-form-label" id="masterLabelCode">Kode Mapel</label>
+                    <input type="text" class="wp-input" id="masterCode" placeholder="Contoh: MAT-01" maxlength="12" oninput="updateMasterPreview()">
+                </div>
+
+                <div class="wp-form-group" id="masterFieldGroup">
+                    <label class="wp-form-label" id="masterLabelField">Bidang / Kategori</label>
+                    <input type="text" class="wp-input" id="masterField" placeholder="Contoh: Matematika / IPA" oninput="updateMasterPreview()">
+                </div>
+
+                <div class="wp-form-group" id="masterNipGroup" style="display:none;">
+                    <label class="wp-form-label">NIP / ID Guru</label>
+                    <input type="text" class="wp-input" id="masterNip" placeholder="Contoh: 198501012010" maxlength="20" oninput="updateMasterPreview()">
+                </div>
+
+                <div class="wp-form-group" id="masterContactGroup" style="display:none;">
+                    <label class="wp-form-label">Kontak / Email</label>
+                    <input type="text" class="wp-input" id="masterContact" placeholder="Contoh: 0812xxxx / budi@school.id" oninput="updateMasterPreview()">
+                </div>
+
+                <div class="wp-form-group full" id="masterGuruLinkGroup">
+                    <label class="wp-form-label">Guru Pengampu</label>
+                    <div id="masterGuruLinkContainer">
+                        <div class="wp-master-link-chips" id="masterGuruLinkChips">
+                            <button type="button" class="wp-master-link-add" onclick="addGuruLink()">
+                                <i class="fas fa-plus"></i> Tambah Guru
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="wp-form-group full" id="masterIconGroup">
+                    <label class="wp-form-label">Ikon Mapel</label>
+                    <div class="wp-master-icon-picker" id="masterIconPicker"></div>
+                </div>
+
+                <div class="wp-form-group full">
+                    <label class="wp-form-label">Keterangan (opsional)</label>
+                    <input type="text" class="wp-input" id="masterNote" placeholder="Catatan tambahan..." oninput="updateMasterPreview()">
+                </div>
+            </div>
+
+        </div>
+        <div class="wp-modal-footer">
+            <button class="wp-btn wp-btn-ghost" onclick="closeMaster()" data-i18n="cancel">Batal</button>
+            <button class="wp-btn wp-btn-primary" onclick="saveMaster()">
+                <i class="fas fa-save"></i><span id="masterSaveBtnText" data-i18n="save">Simpan</span>
             </button>
         </div>
     </div>
@@ -2977,6 +3799,21 @@ body.dark-mode .wp-dash-piket-badge {
                     <div class="wp-lang-option" data-lang="en" onclick="setLang('en')">🇬🇧 English</div>
                 </div>
             </div>
+            <div class="wp-settings-section">
+                <div class="wp-settings-section-title">Master Data</div>
+                <div class="wp-setting-item">
+                    <div class="wp-setting-info">
+                        <div class="wp-setting-icon"><i class="fas fa-database"></i></div>
+                        <div class="wp-setting-text">
+                            <h4>Reset Master Data</h4>
+                            <p>Hapus semua mapel & guru tersimpan</p>
+                        </div>
+                    </div>
+                    <button class="wp-btn wp-btn-danger wp-btn-sm" onclick="resetMasterData()">
+                        <i class="fas fa-trash"></i> Reset
+                    </button>
+                </div>
+            </div>
         </div>
         <div class="wp-modal-footer">
             <button class="wp-btn wp-btn-primary" onclick="closeSettings()" data-i18n="done">Selesai</button>
@@ -3038,7 +3875,7 @@ body.dark-mode .wp-dash-piket-badge {
 const I18N = {
     id: {
         appName: 'JadwalKu', appTagline: 'Student Schedule',
-        navSectionMain: 'Menu Utama', navSectionAccount: 'Akun',
+        navSectionMain: 'Menu Utama', navSectionAccount: 'Akun', navSectionMaster: 'Master Data',
         navDashboard: 'Dashboard', navSchedule: 'Jadwal Pelajaran',
         navPiket: 'Jadwal Piket', navTask: 'Penugasan',
         pageScheduleSub: 'Kelola jadwal pelajaran Senin - Sabtu',
@@ -3090,7 +3927,7 @@ const I18N = {
     },
     en: {
         appName: 'JadwalKu', appTagline: 'Student Schedule',
-        navSectionMain: 'Main Menu', navSectionAccount: 'Account',
+        navSectionMain: 'Main Menu', navSectionAccount: 'Account', navSectionMaster: 'Master Data',
         navDashboard: 'Dashboard', navSchedule: 'Class Schedule',
         navPiket: 'Duty Schedule', navTask: 'Tasks',
         pageScheduleSub: 'Manage class schedule Monday - Saturday',
@@ -3151,10 +3988,11 @@ const CATS = {
     'budaya-baca': { id: 'Budaya Baca', en: 'Reading', pill: 'wp-pill-purple', dot: 'purple', icon: 'fa-book-open', color: '#9333ea' }
 };
 
-const VALID_PAGES = ['dashboard', 'jadwal_pelajaran', 'jadwal_piket', 'kalender_penugasan', 'bantuan'];
+const VALID_PAGES = ['dashboard', 'jadwal_pelajaran', 'jadwal_piket', 'kalender_penugasan', 'master_mapel', 'master_guru', 'bantuan'];
 const PAGE_TITLES = {
     dashboard: 'navDashboard', jadwal_pelajaran: 'navSchedule',
-    jadwal_piket: 'navPiket', kalender_penugasan: 'navTask', bantuan: 'Bantuan'
+    jadwal_piket: 'navPiket', kalender_penugasan: 'navTask',
+    master_mapel: 'Data Mapel', master_guru: 'Data Guru', bantuan: 'Bantuan'
 };
 
 const DEFAULT_DATA = {
@@ -3229,6 +4067,8 @@ const DEFAULT_DATA = {
 let scheduleData = {};
 let piketData = {};
 let taskData = {};
+let masterSubjects = {};
+let masterTeachers = {};
 let currentDay = 'Senin';
 let currentFilter = 'all';
 let editingId = null;
@@ -3242,6 +4082,10 @@ let taskCurrentMonth = new Date();
 let taskSelectedDate = new Date();
 let piketEditId = null;
 let taskEditId = null;
+let masterEditType = null;
+let masterEditName = null;
+let masterGuruLinks = [];
+let masterSelectedIcon = 'fa-book';
 let charts = {};
 
 function t(key) { return I18N[settings.language][key] || key; }
@@ -3283,1389 +4127,433 @@ function animateCounter(el, target) {
     requestAnimationFrame(update);
 }
 
-function getPageFromURL() {
-    const params = new URLSearchParams(window.location.search);
-    const page = params.get('page');
-    const action = params.get('action');
-    if (action === 'logout') { handleLogoutConfirm(); return 'dashboard'; }
-    if (action === 'add' && page === 'jadwal_pelajaran') { setTimeout(() => openAdd(), 300); }
-    if (VALID_PAGES.includes(page)) return page;
-    return 'dashboard';
-}
+/* ============================================ */
+/* MASTER DATA STORAGE — PERBAIKAN              */
+/* ============================================ */
 
-function goToPage(page) {
-    window.location.href = `?page=${page}`;
-}
-
-function init() {
-    const session = localStorage.getItem('jadwalku_session');
-    if (!session) { window.location.href = 'login.html'; return; }
-
-    users = JSON.parse(localStorage.getItem('jadwalku_users') || '[]');
-    if (users.length === 0) {
-        users = [{ username: 'siswa', password: '1234', name: 'Siswa Demo', kelas: 'XI IPA 1', avatarIndex: 0 }];
-        localStorage.setItem('jadwalku_users', JSON.stringify(users));
+function loadMasterData() {
+    try {
+        const subjKey = `jadwalku_master_subjects_${currentUser.username}`;
+        const teachKey = `jadwalku_master_teachers_${currentUser.username}`;
+        const storedSubj = localStorage.getItem(subjKey);
+        const storedTeach = localStorage.getItem(teachKey);
+        masterSubjects = storedSubj ? JSON.parse(storedSubj) : {};
+        masterTeachers = storedTeach ? JSON.parse(storedTeach) : {};
+    } catch (e) {
+        console.error('Error loading master data:', e);
+        masterSubjects = {};
+        masterTeachers = {};
     }
+}
 
-    currentUser = users.find(u => u.username === session);
-    if (!currentUser) {
-        localStorage.removeItem('jadwalku_session');
-        window.location.href = 'login.html';
-        return;
+function saveMasterData() {
+    if (!currentUser) return false;
+    try {
+        const subjKey = `jadwalku_master_subjects_${currentUser.username}`;
+        const teachKey = `jadwalku_master_teachers_${currentUser.username}`;
+        
+        localStorage.setItem(subjKey, JSON.stringify(masterSubjects));
+        localStorage.setItem(teachKey, JSON.stringify(masterTeachers));
+        
+        // Verifikasi
+        const verifySubj = localStorage.getItem(subjKey);
+        const verifyTeach = localStorage.getItem(teachKey);
+        
+        if (!verifySubj || !verifyTeach) {
+            console.error('Master data gagal tersimpan');
+            return false;
+        }
+        return true;
+    } catch (e) {
+        console.error('Error saving master data:', e);
+        showToast('error', 'Gagal Menyimpan', 'Storage penuh atau terjadi kesalahan');
+        return false;
     }
-
-    const saved = JSON.parse(localStorage.getItem('jadwalku_settings') || '{}');
-    settings = { ...settings, ...saved };
-
-    loadSchedule();
-    loadPiket();
-    loadTasks();
-    currentPage = getPageFromURL();
-
-    applyTheme();
-    applyI18n();
-    updateUserUI();
-    renderDayTabs();
-    renderSchedule();
-    updateStats();
-    renderDashboard();
-    renderPiket();
-    renderTaskCalendar();
-    updateNavCounts();
-    setupListeners();
-    showPage(currentPage);
 }
 
-function showPage(page) {
-    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-    const viewEl = document.getElementById('view-' + page);
-    if (viewEl) viewEl.classList.add('active');
-    else { document.getElementById('view-dashboard')?.classList.add('active'); page = 'dashboard'; }
-
-    document.querySelectorAll('.wp-nav-item').forEach(n => n.classList.remove('active'));
-    const navEl = document.querySelector(`.wp-nav-item[data-page="${page}"]`);
-    if (navEl) navEl.classList.add('active');
-
-    const breadcrumbKey = PAGE_TITLES[page] || 'navDashboard';
-    document.getElementById('breadcrumbCurrent').textContent = t(breadcrumbKey);
-
-    if (window.innerWidth <= 768) document.getElementById('wpSidebar').classList.remove('open');
-    if (page === 'dashboard') setTimeout(() => renderCharts(), 150);
-}
-
-function loadSchedule() {
-    const key = `jadwalku_data_${currentUser.username}`;
-    const stored = localStorage.getItem(key);
-    if (stored) {
-        scheduleData = JSON.parse(stored);
-        let maxId = 0;
-        Object.values(scheduleData).forEach(items => items.forEach(i => { if (i.id > maxId) maxId = i.id; }));
-        nextId = maxId + 1;
+function saveSubjectToMaster(name, note) {
+    if (!name || !name.trim()) return false;
+    const key = name.trim();
+    if (!key || key === '-') return false;
+    if (masterSubjects[key]) {
+        masterSubjects[key].count = (masterSubjects[key].count || 0) + 1;
+        masterSubjects[key].lastUsed = new Date().toISOString();
+        if (note && !masterSubjects[key].note) masterSubjects[key].note = note;
+        return false;
     } else {
-        scheduleData = JSON.parse(JSON.stringify(DEFAULT_DATA));
-        saveScheduleToStorage();
-    }
-}
-
-function saveScheduleToStorage() {
-    if (!currentUser) return;
-    localStorage.setItem(`jadwalku_data_${currentUser.username}`, JSON.stringify(scheduleData));
-}
-
-function loadPiket() {
-    const key = `jadwalku_piket_${currentUser.username}`;
-    const stored = localStorage.getItem(key);
-    if (stored) { piketData = JSON.parse(stored); }
-    else {
-        piketData = {
-            'Senin': [{ id: 1, nama: 'Ahmad Fauzi', tugas: 'Menyapu lantai' }],
-            'Selasa': [{ id: 2, nama: 'Budi Santoso', tugas: 'Mengepel' }],
-            'Rabu': [{ id: 3, nama: 'Citra Dewi', tugas: 'Menghapus papan' }],
-            'Kamis': [{ id: 4, nama: 'Dedi Kurniawan', tugas: 'Membuang sampah' }],
-            'Jumat': [{ id: 5, nama: 'Eka Putri', tugas: 'Merapikan meja' }],
-            'Sabtu': [{ id: 6, nama: 'Fajar Ramadhan', tugas: 'Menyapu + Mengepel' }]
+        masterSubjects[key] = {
+            name: key,
+            count: 1,
+            note: note || '',
+            code: '',
+            field: '',
+            guruLinks: [],
+            icon: 'fa-book',
+            createdAt: new Date().toISOString(),
+            lastUsed: new Date().toISOString()
         };
-        savePiketStorage();
+        return true;
     }
 }
 
-function savePiketStorage() {
-    if (!currentUser) return;
-    localStorage.setItem(`jadwalku_piket_${currentUser.username}`, JSON.stringify(piketData));
+function saveTeacherToMaster(name, note) {
+    if (!name || !name.trim()) return false;
+    const key = name.trim();
+    if (!key || key === '-') return false;
+    if (masterTeachers[key]) {
+        masterTeachers[key].count = (masterTeachers[key].count || 0) + 1;
+        masterTeachers[key].lastUsed = new Date().toISOString();
+        if (note && !masterTeachers[key].note) masterTeachers[key].note = note;
+        return false;
+    } else {
+        masterTeachers[key] = {
+            name: key,
+            count: 1,
+            note: note || '',
+            nip: '',
+            field: '',
+            contact: '',
+            createdAt: new Date().toISOString(),
+            lastUsed: new Date().toISOString()
+        };
+        return true;
+    }
 }
 
-function loadTasks() {
-    const key = `jadwalku_tasks_${currentUser.username}`;
-    const stored = localStorage.getItem(key);
-    taskData = stored ? JSON.parse(stored) : {};
-}
-
-function saveTasksStorage() {
-    if (!currentUser) return;
-    localStorage.setItem(`jadwalku_tasks_${currentUser.username}`, JSON.stringify(taskData));
-}
-
-function saveSettings() {
-    localStorage.setItem('jadwalku_settings', JSON.stringify(settings));
-}
-
-function applyI18n() {
-    document.querySelectorAll('[data-i18n]').forEach(el => {
-        const k = el.getAttribute('data-i18n');
-        if (I18N[settings.language][k]) el.textContent = I18N[settings.language][k];
+function rebuildMasterFromSchedule() {
+    // JANGAN reset count — pertahankan data master yang sudah ada
+    Object.values(scheduleData).forEach(items => {
+        items.forEach(item => {
+            if (item.mapel && item.mapel !== '-') {
+                const key = item.mapel.trim();
+                if (!masterSubjects[key]) {
+                    masterSubjects[key] = {
+                        name: key,
+                        count: 0,
+                        note: '',
+                        code: '',
+                        field: '',
+                        guruLinks: [],
+                        icon: 'fa-book',
+                        createdAt: new Date().toISOString(),
+                        lastUsed: new Date().toISOString()
+                    };
+                }
+            }
+            if (item.guru && item.guru !== '-') {
+                const key = item.guru.trim();
+                if (!masterTeachers[key]) {
+                    masterTeachers[key] = {
+                        name: key,
+                        count: 0,
+                        note: '',
+                        nip: '',
+                        field: '',
+                        contact: '',
+                        createdAt: new Date().toISOString(),
+                        lastUsed: new Date().toISOString()
+                    };
+                }
+            }
+        });
     });
-    document.querySelectorAll('.wp-lang-option').forEach(o => o.classList.toggle('selected', o.dataset.lang === settings.language));
-    renderDayTabs();
-    renderSchedule();
-    renderPiket();
-    renderTaskCalendar();
+    
+    saveMasterData();
+    updateMasterNavCounts();
 }
 
-function updateUserUI() {
-    if (!currentUser) return;
-    const initial = currentUser.name.charAt(0).toUpperCase();
-    document.getElementById('userAvatar').textContent = initial;
-    document.getElementById('userName').textContent = currentUser.name;
-    document.getElementById('userRole').textContent = currentUser.kelas || 'Siswa';
+function updateMasterNavCounts() {
+    const mEl = document.getElementById('navMasterMapelCount');
+    const gEl = document.getElementById('navMasterGuruCount');
+    if (mEl) mEl.textContent = Object.keys(masterSubjects).length;
+    if (gEl) gEl.textContent = Object.keys(masterTeachers).length;
+
+    const t1 = document.getElementById('masterMapelTotal');
+    const t2 = document.getElementById('masterGuruTotal');
+    const t3 = document.getElementById('masterMapelTotal2');
+    const t4 = document.getElementById('masterGuruTotal2');
+    if (t1) animateCounter(t1, Object.keys(masterSubjects).length);
+    if (t2) animateCounter(t2, Object.keys(masterTeachers).length);
+    if (t3) animateCounter(t3, Object.keys(masterSubjects).length);
+    if (t4) animateCounter(t4, Object.keys(masterTeachers).length);
+
+    const ut1 = document.getElementById('masterMapelUsageTotal');
+    const ut2 = document.getElementById('masterGuruUsageTotal');
+    if (ut1) {
+        const totalUsage = Object.values(masterSubjects).reduce((s, m) => s + (m.count || 0), 0);
+        ut1.textContent = `Total penggunaan: ${totalUsage}`;
+    }
+    if (ut2) {
+        const totalUsage = Object.values(masterTeachers).reduce((s, m) => s + (m.count || 0), 0);
+        ut2.textContent = `Total penggunaan: ${totalUsage}`;
+    }
 }
 
-function toggleSidebar() { document.getElementById('wpSidebar').classList.toggle('open'); }
+/* ============================================ */
+/* AUTOCOMPLETE                                 */
+/* ============================================ */
 
-function toggleTheme() {
-    settings.darkMode = !settings.darkMode;
-    saveSettings();
-    applyTheme();
-    showToast('info', settings.darkMode ? t('themeOn') : t('themeOff'), '');
-    setTimeout(() => renderCharts(), 200);
+const autocompleteState = {
+    mapel: { open: false, highlight: -1 },
+    guru: { open: false, highlight: -1 }
+};
+
+function getMasterList(type) {
+    const source = type === 'mapel' ? masterSubjects : masterTeachers;
+    return Object.values(source).sort((a, b) => (b.count || 0) - (a.count || 0));
 }
 
-function applyTheme() {
-    document.body.classList.toggle('dark-mode', settings.darkMode);
-    const toggle = document.getElementById('darkToggle');
-    if (toggle) toggle.checked = settings.darkMode;
-    const btn = document.getElementById('themeBtn');
-    if (btn) btn.innerHTML = settings.darkMode ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
-}
+function renderAutocompleteDropdown(type, query = '') {
+    const dropdown = document.getElementById(type === 'mapel' ? 'mapelDropdown' : 'guruDropdown');
+    if (!dropdown) return;
 
-function setLang(lang) {
-    settings.language = lang;
-    saveSettings();
-    applyI18n();
-    renderDashboard();
-    renderCharts();
-    showToast('success', t('langChanged'), t('langChangedMsg'));
-}
+    const allItems = getMasterList(type);
+    const q = (query || '').toLowerCase().trim();
 
-function updateNavCounts() {
-    let sc = 0; Object.values(scheduleData).forEach(a => sc += a.length);
-    let pc = 0; Object.values(piketData).forEach(a => pc += a.length);
-    let tc = 0; Object.values(taskData).forEach(a => tc += a.length);
-    const scEl = document.getElementById('navScheduleCount');
-    const pcEl = document.getElementById('navPiketCount');
-    const tcEl = document.getElementById('navTaskCount');
-    if (scEl) scEl.textContent = sc;
-    if (pcEl) pcEl.textContent = pc;
-    if (tcEl) tcEl.textContent = tc;
-}
+    let filtered = allItems;
+    if (q) {
+        filtered = allItems.filter(item => item.name.toLowerCase().includes(q));
+    }
 
-function renderDashboard() {
-    const lang = settings.language;
-    const now = new Date();
-    const hour = now.getHours();
-    const todayName = getTodayDayName();
+    filtered = filtered.slice(0, 8);
 
-    let greeting = '';
-    if (hour < 11) greeting = lang === 'id' ? 'Selamat Pagi' : 'Good Morning';
-    else if (hour < 15) greeting = lang === 'id' ? 'Selamat Siang' : 'Good Afternoon';
-    else if (hour < 18) greeting = lang === 'id' ? 'Selamat Sore' : 'Good Evening';
-    else greeting = lang === 'id' ? 'Selamat Malam' : 'Good Night';
+    const iconType = type === 'mapel' ? 'subject' : 'teacher';
+    const iconFa = type === 'mapel' ? 'fa-book' : 'fa-chalkboard-teacher';
+    const headerLabel = type === 'mapel' ? 'MAPEL TERSIMPAN' : 'GURU TERSIMPAN';
 
-    const gT = document.getElementById('greetingText');
-    const gS = document.getElementById('greetingSub');
-    const gB = document.getElementById('greetingBig');
-    if (gT) gT.textContent = `${greeting}, ${currentUser.name}`;
-    if (gS) gS.textContent = lang === 'id' ? 'Berikut ringkasan aktivitasmu.' : 'Here is your activity summary.';
-    if (gB) gB.textContent = `${greeting}, ${currentUser.name} 👋`;
+    let html = '';
 
-    document.getElementById('badgeDay').textContent = lang === 'id' ? todayName : DAYS_EN[DAYS.indexOf(todayName)] || todayName;
-    document.getElementById('badgeTime').textContent = now.toLocaleTimeString(lang === 'id' ? 'id-ID' : 'en-US', { hour: '2-digit', minute: '2-digit' });
-
-    const todaySchedules = todayName !== 'Minggu' ? (scheduleData[todayName] || []) : [];
-    const todaySubjects = todaySchedules.filter(s => s.kategori === 'pelajaran').length;
-    document.getElementById('badgeSubjects').textContent = `${todaySubjects} ${lang === 'id' ? 'Pelajaran' : 'Subjects'}`;
-
-    const pendingTasks = Object.values(taskData).flat().filter(t => !t.done).length;
-    document.getElementById('badgeTasks').textContent = `${pendingTasks} ${lang === 'id' ? 'Tugas' : 'Tasks'}`;
-
-    let total = 0, mapel = 0, istirahat = 0;
-    Object.values(scheduleData).forEach(items => items.forEach(i => {
-        total++;
-        if (i.kategori === 'pelajaran') mapel++;
-        else if (i.kategori === 'istirahat') istirahat++;
-    }));
-    const mT = document.getElementById('miniTotal');
-    const mM = document.getElementById('miniMapel');
-    const mI = document.getElementById('miniIstirahat');
-    const mTg = document.getElementById('miniTugas');
-    if (mT) animateCounter(mT, total);
-    if (mM) animateCounter(mM, mapel);
-    if (mI) animateCounter(mI, istirahat);
-    if (mTg) animateCounter(mTg, pendingTasks);
-
-    const listEl = document.getElementById('dashTodayList');
-    const tdl = document.getElementById('todayDateLabel');
-    if (tdl) tdl.textContent = now.toLocaleDateString(lang === 'id' ? 'id-ID' : 'en-US', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
-
-    if (listEl) {
-        if (todayName === 'Minggu') {
-            listEl.innerHTML = `<div class="wp-today-empty"><i class="fas fa-umbrella-beach"></i><div>${lang === 'id' ? 'Hari Minggu - Libur!' : 'Sunday - Holiday!'}</div></div>`;
-        } else if (todaySchedules.length === 0) {
-            listEl.innerHTML = `<div class="wp-today-empty"><i class="fas fa-calendar-xmark"></i><div>${lang === 'id' ? 'Tidak ada jadwal hari ini' : 'No schedule today'}</div></div>`;
-        } else {
-            const sorted = [...todaySchedules].sort((a, b) => a.jamKe - b.jamKe);
-            listEl.innerHTML = sorted.map(item => {
-                const cat = CATS[item.kategori] || CATS['pelajaran'];
-                const catLabel = lang === 'id' ? cat.id : cat.en;
-                return `
-                    <div class="wp-today-item" data-cat="${item.kategori}" onclick="selectDay('${todayName}');goToPage('jadwal_pelajaran')">
-                        <div class="wp-today-time">${item.waktu ? item.waktu.split(' - ')[0] : 'Jam ' + item.jamKe}</div>
-                        <div class="wp-today-bar"></div>
-                        <div class="wp-today-info">
-                            <div class="wp-today-name">${escapeHtml(item.mapel)}</div>
-                            <div class="wp-today-sub">${catLabel}${item.guru && item.guru !== '-' ? ' • ' + escapeHtml(item.guru) : ''}</div>
+    if (filtered.length > 0) {
+        html += `<div class="wp-autocomplete-header">
+            <span><i class="fas ${iconFa}" style="margin-right:6px;"></i>${headerLabel}</span>
+            <span class="wp-autocomplete-header-count">${filtered.length}</span>
+        </div>`;
+        html += `<div class="wp-autocomplete-list">`;
+        filtered.forEach((item, idx) => {
+            const initial = item.name.charAt(0).toUpperCase();
+            const highlightedName = q ? item.name.replace(new RegExp(`(${escapeRegex(q)})`, 'gi'), '<mark>$1</mark>') : escapeHtml(item.name);
+            html += `
+                <div class="wp-autocomplete-item" data-name="${escapeHtml(item.name)}" data-idx="${idx}" onclick="selectAutocompleteItem('${type}', '${escapeJsString(item.name)}')">
+                    <div class="wp-autocomplete-avatar ${iconType}">${escapeHtml(initial)}</div>
+                    <div class="wp-autocomplete-info">
+                        <div class="wp-autocomplete-name">${highlightedName}</div>
+                        <div class="wp-autocomplete-meta">
+                            ${item.note ? `<span class="wp-autocomplete-meta-item"><i class="fas fa-sticky-note"></i>${escapeHtml(item.note)}</span>` : ''}
                         </div>
                     </div>
-                `;
-            }).join('');
-        }
-    }
-
-    const weekEl = document.getElementById('weekGrid');
-    if (weekEl) {
-        let totalSchedules = 0;
-        const possibleSlots = DAYS.length * 9;
-        weekEl.innerHTML = DAYS.map(day => {
-            const count = (scheduleData[day] || []).length;
-            totalSchedules += count;
-            const isToday = day === todayName;
-            const shortName = { 'Senin': 'Sen', 'Selasa': 'Sel', 'Rabu': 'Rab', 'Kamis': 'Kam', 'Jumat': 'Jum', 'Sabtu': 'Sab' }[day];
-            return `
-                <div class="wp-week-card ${isToday ? 'today' : ''}" onclick="selectDay('${day}');goToPage('jadwal_pelajaran')">
-                    <div class="wp-week-day">${shortName}</div>
-                    <div class="wp-week-count">${count}</div>
-                    <div class="wp-week-label">${lang === 'id' ? 'jadwal' : 'items'}</div>
+                    <div class="wp-autocomplete-usage">${item.count || 0}×</div>
                 </div>
             `;
-        }).join('');
-        const percent = Math.min(100, Math.round((totalSchedules / possibleSlots) * 100));
-        const pT = document.getElementById('progressText');
-        const pF = document.getElementById('progressFill');
-        if (pT) pT.textContent = percent + '%';
-        if (pF) pF.style.width = percent + '%';
+        });
+        html += `</div>`;
+    } else if (q) {
+        html += `<div class="wp-autocomplete-empty">
+            <i class="fas fa-search"></i>
+            <div>Tidak ditemukan</div>
+        </div>`;
+    } else {
+        html += `<div class="wp-autocomplete-empty">
+            <i class="fas fa-inbox"></i>
+            <div>Belum ada data tersimpan</div>
+        </div>`;
     }
 
-    // Render piket hari ini
-    renderDashPiket();
+    if (q && !allItems.some(i => i.name.toLowerCase() === q)) {
+        html += `
+            <button type="button" class="wp-autocomplete-add" onclick="addNewFromAutocomplete('${type}', '${escapeJsString(query)}')">
+                <div class="wp-autocomplete-add-icon"><i class="fas fa-plus"></i></div>
+                <div class="wp-autocomplete-add-text">
+                    <div class="wp-autocomplete-add-title">Tambahkan "${escapeHtml(query)}"</div>
+                    <div class="wp-autocomplete-add-desc">Otomatis tersimpan saat jadwal disimpan</div>
+                </div>
+            </button>
+        `;
+    }
+
+    dropdown.innerHTML = html;
 }
 
-function renderDashPiket() {
-    const lang = settings.language;
-    const todayName = getTodayDayName();
-    const dayLabelEl = document.getElementById('dashPiketDay');
-    const bodyEl = document.getElementById('dashPiketBody');
-    const cardEl = document.getElementById('dashPiketCard');
-    if (!bodyEl || !cardEl) return;
+function escapeRegex(str) {
+    return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
 
-    if (dayLabelEl) {
-        const dayDisplay = lang === 'id' ? todayName : (DAYS_EN[DAYS.indexOf(todayName)] || todayName);
-        dayLabelEl.innerHTML = `<i class="fas fa-calendar-day"></i><span>${dayDisplay}</span>`;
+function escapeJsString(str) {
+    return String(str).replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/"/g, '\\"').replace(/\n/g, '\\n');
+}
+
+function openAutocomplete(type) {
+    const dropdown = document.getElementById(type === 'mapel' ? 'mapelDropdown' : 'guruDropdown');
+    const toggle = document.querySelector(`#${type}Autocomplete .wp-autocomplete-toggle`);
+    const input = document.getElementById(type === 'mapel' ? 'fMapel' : 'fGuru');
+    if (!dropdown) return;
+    renderAutocompleteDropdown(type, input ? input.value : '');
+    dropdown.classList.add('show');
+    if (toggle) toggle.classList.add('open');
+    autocompleteState[type].open = true;
+    autocompleteState[type].highlight = -1;
+}
+
+function closeAutocomplete(type) {
+    const dropdown = document.getElementById(type === 'mapel' ? 'mapelDropdown' : 'guruDropdown');
+    const toggle = document.querySelector(`#${type}Autocomplete .wp-autocomplete-toggle`);
+    if (!dropdown) return;
+    dropdown.classList.remove('show');
+    if (toggle) toggle.classList.remove('open');
+    autocompleteState[type].open = false;
+    autocompleteState[type].highlight = -1;
+}
+
+function toggleAutocomplete(type) {
+    if (autocompleteState[type].open) closeAutocomplete(type);
+    else {
+        const input = document.getElementById(type === 'mapel' ? 'fMapel' : 'fGuru');
+        if (input) input.focus();
+        openAutocomplete(type);
     }
+}
 
-    if (todayName === 'Minggu') {
-        cardEl.style.display = 'none';
-        return;
-    }
-    cardEl.style.display = '';
+function selectAutocompleteItem(type, name) {
+    const input = document.getElementById(type === 'mapel' ? 'fMapel' : 'fGuru');
+    if (input) input.value = name;
+    closeAutocomplete(type);
+}
 
-    const todayPiket = piketData[todayName] || [];
+function addNewFromAutocomplete(type, name) {
+    const input = document.getElementById(type === 'mapel' ? 'fMapel' : 'fGuru');
+    if (input) input.value = name;
+    closeAutocomplete(type);
+}
 
-    if (todayPiket.length === 0) {
-        bodyEl.innerHTML = `
-            <div class="wp-dash-piket-empty">
-                <i class="fas fa-user-slash"></i>
-                <div class="wp-dash-piket-empty-title">${lang === 'id' ? 'Belum Ada Petugas Piket' : 'No Duty Assigned'}</div>
-                <div>${lang === 'id' ? 'Tambahkan petugas piket untuk hari ini' : 'Add duty person for today'}</div>
-                <button class="wp-dash-piket-btn" style="margin-top:16px;" onclick="goToPage('jadwal_piket')">
-                    <i class="fas fa-plus"></i>
-                    <span>${lang === 'id' ? 'Tambah Petugas' : 'Add Person'}</span>
+function setupAutocompleteListeners() {
+    ['mapel', 'guru'].forEach(type => {
+        const input = document.getElementById(type === 'mapel' ? 'fMapel' : 'fGuru');
+        const wrap = document.getElementById(type + 'Autocomplete');
+        if (!input || !wrap) return;
+
+        input.addEventListener('focus', () => {
+            openAutocomplete(type);
+        });
+
+        input.addEventListener('input', () => {
+            if (!autocompleteState[type].open) openAutocomplete(type);
+            else renderAutocompleteDropdown(type, input.value);
+            autocompleteState[type].highlight = -1;
+        });
+
+        input.addEventListener('keydown', (e) => {
+            const dropdown = document.getElementById(type === 'mapel' ? 'mapelDropdown' : 'guruDropdown');
+            const items = dropdown.querySelectorAll('.wp-autocomplete-item');
+            if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                if (!autocompleteState[type].open) { openAutocomplete(type); return; }
+                autocompleteState[type].highlight = Math.min(autocompleteState[type].highlight + 1, items.length - 1);
+                updateHighlight(type, items);
+            } else if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                autocompleteState[type].highlight = Math.max(autocompleteState[type].highlight - 1, -1);
+                updateHighlight(type, items);
+            } else if (e.key === 'Enter') {
+                if (autocompleteState[type].open && autocompleteState[type].highlight >= 0) {
+                    e.preventDefault();
+                    items[autocompleteState[type].highlight].click();
+                } else if (autocompleteState[type].open) {
+                    const match = items.length === 1 ? items[0] : null;
+                    if (match) { e.preventDefault(); match.click(); }
+                    else closeAutocomplete(type);
+                }
+            } else if (e.key === 'Escape') {
+                closeAutocomplete(type);
+            }
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!wrap.contains(e.target)) closeAutocomplete(type);
+        });
+    });
+}
+
+function updateHighlight(type, items) {
+    items.forEach((el, idx) => {
+        el.classList.toggle('highlight', idx === autocompleteState[type].highlight);
+        if (idx === autocompleteState[type].highlight) {
+            el.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+        }
+    });
+}
+
+/* ============================================ */
+/* MASTER DATA MANAGER PAGE                     */
+/* ============================================ */
+
+const MASTER_ICONS = [
+    'fa-book', 'fa-calculator', 'fa-flask', 'fa-globe', 'fa-dna',
+    'fa-atom', 'fa-language', 'fa-landmark', 'fa-palette', 'fa-music',
+    'fa-futbol', 'fa-laptop-code', 'fa-chart-line', 'fa-microscope',
+    'fa-book-open', 'fa-scroll'
+];
+
+function renderMasterIconPicker() {
+    const picker = document.getElementById('masterIconPicker');
+    if (!picker) return;
+    picker.innerHTML = MASTER_ICONS.map(icon => `
+        <div class="wp-master-icon-option ${icon === masterSelectedIcon ? 'selected' : ''}"
+             onclick="selectMasterIcon('${icon}')" title="${icon}">
+            <i class="fas ${icon}"></i>
+        </div>
+    `).join('');
+}
+
+function selectMasterIcon(icon) {
+    masterSelectedIcon = icon;
+    renderMasterIconPicker();
+    updateMasterPreview();
+}
+
+function renderMasterGuruLinks() {
+    const container = document.getElementById('masterGuruLinkChips');
+    if (!container) return;
+
+    const guruNames = Object.keys(masterTeachers).sort();
+
+    let html = '';
+    masterGuruLinks.forEach((name, idx) => {
+        html += `
+            <div class="wp-master-link-chip">
+                <i class="fas fa-chalkboard-teacher" style="color:var(--green);font-size:10px;"></i>
+                <span>${escapeHtml(name)}</span>
+                <button type="button" class="wp-master-link-chip-remove" onclick="removeGuruLink(${idx})" title="Hapus">
+                    <i class="fas fa-times"></i>
                 </button>
             </div>
         `;
-        return;
-    }
+    });
 
-    const itemsHtml = todayPiket.map((p, idx) => `
-        <div class="wp-dash-piket-item" onclick="goToPage('jadwal_piket')" title="${lang === 'id' ? 'Klik untuk kelola' : 'Click to manage'}">
-            <div class="wp-dash-piket-avatar">${escapeHtml(p.nama.charAt(0).toUpperCase())}</div>
-            <div class="wp-dash-piket-info">
-                <div class="wp-dash-piket-name">${escapeHtml(p.nama)}</div>
-                <div class="wp-dash-piket-task">
-                    <i class="fas fa-tasks"></i>
-                    <span>${escapeHtml(p.tugas || (lang === 'id' ? 'Petugas piket' : 'Duty person'))}</span>
-                </div>
-            </div>
-            ${idx === 0 ? `<div class="wp-dash-piket-badge">${lang === 'id' ? 'Utama' : 'Lead'}</div>` : ''}
-        </div>
-    `).join('');
-
-    bodyEl.innerHTML = `
-        <div class="wp-dash-piket-list">${itemsHtml}</div>
-        <div class="wp-dash-piket-footer">
-            <div class="wp-dash-piket-footer-info">
-                <i class="fas fa-users"></i>
-                <span>${todayPiket.length} ${lang === 'id' ? 'petugas piket hari ini' : 'people on duty today'}</span>
-            </div>
-            <button class="wp-dash-piket-btn" onclick="goToPage('jadwal_piket')">
-                <i class="fas fa-arrow-right"></i>
-                <span>${lang === 'id' ? 'Kelola Piket' : 'Manage Duty'}</span>
-            </button>
-        </div>
-    `;
-}
-
-/* CHARTS WITH BEAUTIFUL ANIMATIONS */
-function getChartTextColor() { return settings.darkMode ? '#cbd5e1' : '#4b5563'; }
-function getChartGridColor() { return settings.darkMode ? '#334155' : '#e5e7eb'; }
-
-function renderCharts() {
-    if (typeof Chart === 'undefined') return;
-    const textColor = getChartTextColor();
-    const gridColor = getChartGridColor();
-    const font = { family: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' };
-
-    /* 1. CATEGORY DOUGHNUT */
-    const catCtx = document.getElementById('chartCategory');
-    if (catCtx) {
-        if (charts.category) charts.category.destroy();
-        const categoryCount = { pelajaran: 0, istirahat: 0, mbg: 0, 'budaya-baca': 0 };
-        Object.values(scheduleData).forEach(items => items.forEach(i => {
-            if (categoryCount[i.kategori] !== undefined) categoryCount[i.kategori]++;
-        }));
-        const lang = settings.language;
-        const labels = [
-            lang === 'id' ? 'Pelajaran' : 'Subjects',
-            lang === 'id' ? 'Istirahat' : 'Breaks',
-            lang === 'id' ? 'Istirahat MBG' : 'MBG Break',
-            lang === 'id' ? 'Budaya Baca' : 'Reading'
-        ];
-        const data = [categoryCount.pelajaran, categoryCount.istirahat, categoryCount.mbg, categoryCount['budaya-baca']];
-
-        const centerTextPlugin = {
-            id: 'centerText_' + Date.now(),
-            afterDraw: function(chart) {
-                const { ctx, chartArea } = chart;
-                if (!chartArea) return;
-                const total = data.reduce((a, b) => a + b, 0);
-                const centerX = (chartArea.left + chartArea.right) / 2;
-                const centerY = (chartArea.top + chartArea.bottom) / 2;
-                ctx.save();
-                ctx.font = 'bold 30px ' + font.family;
-                ctx.fillStyle = textColor;
-                ctx.textAlign = 'center';
-                ctx.textBaseline = 'middle';
-                ctx.fillText(total, centerX, centerY - 8);
-                ctx.font = '700 10px ' + font.family;
-                ctx.fillStyle = settings.darkMode ? '#94a3b8' : '#9ca3af';
-                ctx.fillText('TOTAL', centerX, centerY + 16);
-                ctx.restore();
-            }
-        };
-
-        charts.category = new Chart(catCtx, {
-            type: 'doughnut',
-            data: {
-                labels: labels,
-                datasets: [{
-                    data: data,
-                    backgroundColor: ['#4f46e5', '#f59e0b', '#10b981', '#9333ea'],
-                    hoverBackgroundColor: ['#6366f1', '#fbbf24', '#34d399', '#a855f7'],
-                    borderColor: settings.darkMode ? '#1e293b' : '#ffffff',
-                    borderWidth: 4,
-                    hoverOffset: 16,
-                    hoverBorderWidth: 5,
-                    hoverBorderColor: settings.darkMode ? '#0f172a' : '#f8fafc'
-                }]
-            },
-            plugins: [centerTextPlugin],
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                cutout: '68%',
-                animation: { animateRotate: true, animateScale: true, duration: 1500, easing: 'easeOutQuart' },
-                transitions: { active: { animation: { duration: 500, easing: 'easeOutCubic' } } },
-                plugins: {
-                    legend: {
-                        position: 'bottom',
-                        labels: {
-                            color: textColor,
-                            font: { ...font, size: 12, weight: '700' },
-                            padding: 16, boxWidth: 14, boxHeight: 14,
-                            usePointStyle: true, pointStyle: 'circle',
-                            generateLabels: function(chart) {
-                                const data = chart.data;
-                                return data.labels.map((label, i) => {
-                                    const val = data.datasets[0].data[i];
-                                    const total = data.datasets[0].data.reduce((a, b) => a + b, 0);
-                                    const pct = total > 0 ? Math.round((val / total) * 100) : 0;
-                                    return {
-                                        text: `${label} (${pct}%)`,
-                                        fillStyle: data.datasets[0].backgroundColor[i],
-                                        strokeStyle: data.datasets[0].backgroundColor[i],
-                                        lineWidth: 0, pointStyle: 'circle', hidden: false, index: i
-                                    };
-                                });
-                            }
-                        }
-                    },
-                    tooltip: {
-                        backgroundColor: 'rgba(15,23,42,0.96)',
-                        titleColor: '#fff', bodyColor: '#fff',
-                        padding: 14, cornerRadius: 10,
-                        borderColor: 'rgba(168,85,247,0.4)', borderWidth: 1.5,
-                        titleFont: { ...font, size: 13, weight: '700' },
-                        bodyFont: { ...font, size: 13, weight: '500' },
-                        displayColors: true, boxPadding: 6,
-                        callbacks: {
-                            label: function(ctx) {
-                                const total = ctx.dataset.data.reduce((a, b) => a + b, 0);
-                                const pct = total > 0 ? Math.round((ctx.parsed / total) * 100) : 0;
-                                return `  ${ctx.label}: ${ctx.parsed} (${pct}%)`;
-                            }
-                        }
-                    }
-                }
-            }
-        });
-    }
-
-    /* 2. WEEK BAR */
-    const weekCtx = document.getElementById('chartWeek');
-    if (weekCtx) {
-        if (charts.week) charts.week.destroy();
-        const lang = settings.language;
-        const shortNames = lang === 'id' ? ['Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab'] : ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-        const weekData = DAYS.map(day => (scheduleData[day] || []).length);
-        const todayName = getTodayDayName();
-        const bgColors = DAYS.map(day => day === todayName ? 'rgba(168,85,247,1)' : 'rgba(79,70,229,0.85)');
-        const hoverColors = DAYS.map(day => day === todayName ? 'rgba(168,85,247,1)' : 'rgba(79,70,229,1)');
-
-        const barLabelPlugin = {
-            id: 'barLabel_' + Date.now(),
-            afterDatasetsDraw: function(chart) {
-                const { ctx } = chart;
-                chart.data.datasets.forEach((dataset, i) => {
-                    const meta = chart.getDatasetMeta(i);
-                    meta.data.forEach((bar, index) => {
-                        const value = dataset.data[index];
-                        if (value > 0) {
-                            ctx.save();
-                            ctx.font = '700 11px ' + font.family;
-                            ctx.fillStyle = settings.darkMode ? '#cbd5e1' : '#4b5563';
-                            ctx.textAlign = 'center';
-                            ctx.textBaseline = 'bottom';
-                            ctx.fillText(value, bar.x, bar.y - 6);
-                            ctx.restore();
-                        }
-                    });
-                });
-            }
-        };
-
-        charts.week = new Chart(weekCtx, {
-            type: 'bar',
-            data: {
-                labels: shortNames,
-                datasets: [{
-                    label: lang === 'id' ? 'Jumlah Jadwal' : 'Schedule Count',
-                    data: weekData,
-                    backgroundColor: bgColors,
-                    hoverBackgroundColor: hoverColors,
-                    borderRadius: 10,
-                    borderSkipped: false,
-                    barThickness: 'flex',
-                    maxBarThickness: 52,
-                    hoverBorderColor: 'transparent'
-                }]
-            },
-            plugins: [barLabelPlugin],
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                animation: {
-                    duration: 1300,
-                    easing: 'easeOutQuart',
-                    delay: (context) => {
-                        if (context.type === 'data' && context.mode === 'default') return context.dataIndex * 120;
-                        return 0;
-                    }
-                },
-                transitions: { active: { animation: { duration: 500, easing: 'easeOutCubic' } } },
-                plugins: {
-                    legend: { display: false },
-                    tooltip: {
-                        backgroundColor: 'rgba(15,23,42,0.96)',
-                        titleColor: '#fff', bodyColor: '#fff',
-                        padding: 14, cornerRadius: 10,
-                        borderColor: 'rgba(79,70,229,0.4)', borderWidth: 1.5,
-                        titleFont: { ...font, size: 13, weight: '700' },
-                        bodyFont: { ...font, size: 13, weight: '500' },
-                        displayColors: false,
-                        callbacks: {
-                            title: function(ctx) { return ctx[0].label; },
-                            label: function(ctx) {
-                                return `  ${ctx.parsed.y} ${lang === 'id' ? 'jadwal' : 'schedules'}`;
-                            }
-                        }
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        ticks: { color: textColor, font: { ...font, size: 11.5, weight: '600' }, stepSize: 2, precision: 0, padding: 8 },
-                        grid: { color: gridColor, drawBorder: false, borderDash: [4, 4] }
-                    },
-                    x: {
-                        ticks: { color: textColor, font: { ...font, size: 12, weight: '700' } },
-                        grid: { display: false }
-                    }
-                }
-            }
-        });
-    }
-
-    /* 3. PROGRESS LINE */
-    const progressCtx = document.getElementById('chartProgress');
-    if (progressCtx) {
-        if (charts.progress) charts.progress.destroy();
-        const lang = settings.language;
-        const labels = [];
-        const pendingData = [];
-        const doneData = [];
-        for (let i = 6; i >= 0; i--) {
-            const d = new Date();
-            d.setDate(d.getDate() - i);
-            const dateStr = formatDate(d);
-            const tasks = taskData[dateStr] || [];
-            const dayLabels = lang === 'id' ? ['Min', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab'] : ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-            labels.push(dayLabels[d.getDay()]);
-            pendingData.push(tasks.filter(t => !t.done).length);
-            doneData.push(tasks.filter(t => t.done).length);
-        }
-
-        const ctx = progressCtx.getContext('2d');
-        const gradientPending = ctx.createLinearGradient(0, 0, 0, 220);
-        gradientPending.addColorStop(0, 'rgba(245, 158, 11, 0.28)');
-        gradientPending.addColorStop(1, 'rgba(245, 158, 11, 0.02)');
-
-        const gradientDone = ctx.createLinearGradient(0, 0, 0, 220);
-        gradientDone.addColorStop(0, 'rgba(16, 185, 129, 0.28)');
-        gradientDone.addColorStop(1, 'rgba(16, 185, 129, 0.02)');
-
-        charts.progress = new Chart(progressCtx, {
-            type: 'line',
-            data: {
-                labels,
-                datasets: [
-                    {
-                        label: lang === 'id' ? 'Tugas Aktif' : 'Pending Tasks',
-                        data: pendingData,
-                        borderColor: '#f59e0b',
-                        backgroundColor: gradientPending,
-                        tension: 0.4, fill: true,
-                        pointBackgroundColor: '#f59e0b',
-                        pointBorderColor: '#fff', pointBorderWidth: 3,
-                        pointRadius: 6, pointHoverRadius: 11, pointHoverBorderWidth: 4,
-                        pointHoverBackgroundColor: '#f59e0b', pointHoverBorderColor: '#fff',
-                        borderWidth: 3, borderCapStyle: 'round', borderJoinStyle: 'round'
-                    },
-                    {
-                        label: lang === 'id' ? 'Selesai' : 'Completed',
-                        data: doneData,
-                        borderColor: '#10b981',
-                        backgroundColor: gradientDone,
-                        tension: 0.4, fill: true,
-                        pointBackgroundColor: '#10b981',
-                        pointBorderColor: '#fff', pointBorderWidth: 3,
-                        pointRadius: 6, pointHoverRadius: 11, pointHoverBorderWidth: 4,
-                        pointHoverBackgroundColor: '#10b981', pointHoverBorderColor: '#fff',
-                        borderWidth: 3, borderCapStyle: 'round', borderJoinStyle: 'round'
-                    }
-                ]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                interaction: { mode: 'index', intersect: false },
-                animation: {
-                    duration: 1500,
-                    easing: 'easeOutQuart',
-                    delay: (context) => {
-                        if (context.type === 'data' && context.mode === 'default') {
-                            return context.dataIndex * 100 + context.datasetIndex * 250;
-                        }
-                        return 0;
-                    }
-                },
-                transitions: { active: { animation: { duration: 500, easing: 'easeOutCubic' } } },
-                plugins: {
-                    legend: {
-                        position: 'top', align: 'end',
-                        labels: {
-                            color: textColor,
-                            font: { ...font, size: 12, weight: '700' },
-                            padding: 16, boxWidth: 14, boxHeight: 14,
-                            usePointStyle: true, pointStyle: 'circle'
-                        }
-                    },
-                    tooltip: {
-                        backgroundColor: 'rgba(15,23,42,0.96)',
-                        titleColor: '#fff', bodyColor: '#fff',
-                        padding: 14, cornerRadius: 10,
-                        borderColor: 'rgba(16,185,129,0.4)', borderWidth: 1.5,
-                        titleFont: { ...font, size: 13, weight: '700' },
-                        bodyFont: { ...font, size: 13, weight: '500' },
-                        displayColors: true, boxPadding: 6
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        ticks: { color: textColor, font: { ...font, size: 11.5, weight: '600' }, stepSize: 1, precision: 0, padding: 8 },
-                        grid: { color: gridColor, drawBorder: false, borderDash: [4, 4] }
-                    },
-                    x: {
-                        ticks: { color: textColor, font: { ...font, size: 12, weight: '700' } },
-                        grid: { display: false }
-                    }
-                }
-            }
-        });
-    }
-}
-
-function renderDayTabs() {
-    const container = document.getElementById('dayTabs');
-    if (!container) return;
-    const lang = settings.language;
-    const todayName = getTodayDayName();
-    const shortNames = {
-        'Senin': { id: 'Sen', en: 'Mon' }, 'Selasa': { id: 'Sel', en: 'Tue' },
-        'Rabu': { id: 'Rab', en: 'Wed' }, 'Kamis': { id: 'Kam', en: 'Thu' },
-        'Jumat': { id: 'Jum', en: 'Fri' }, 'Sabtu': { id: 'Sab', en: 'Sat' }
-    };
-    container.innerHTML = DAYS.map(day => {
-        const count = (scheduleData[day] || []).length;
-        const isToday = day === todayName;
-        const isActive = day === currentDay;
-        return `
-            <button class="wp-subtab ${isActive ? 'active' : ''}" onclick="selectDay('${day}')">
-                <span class="wp-subtab-day">${shortNames[day][lang]}</span>
-                <span class="wp-subtab-date">${isToday ? (lang === 'id' ? 'Hari ini' : 'Today') : ''}</span>
-                ${count > 0 ? `<span class="wp-subtab-count">${count}</span>` : ''}
-            </button>
-        `;
-    }).join('');
-}
-
-function selectDay(day) {
-    currentDay = day;
-    renderDayTabs();
-    renderSchedule();
-}
-
-function renderSchedule() {
-    const container = document.getElementById('scheduleList');
-    if (!container) return;
-    const lang = settings.language;
-    let items = scheduleData[currentDay] || [];
-    if (currentFilter !== 'all') items = items.filter(i => i.kategori === currentFilter);
-    items = [...items].sort((a, b) => a.jamKe - b.jamKe);
-
-    if (items.length === 0) {
-        container.innerHTML = `<tr><td colspan="4"><div class="wp-today-empty" style="padding:48px 20px;"><i class="fas fa-calendar-plus"></i><div style="font-weight:700;color:var(--text);margin-bottom:6px;font-size:14px;">${t('emptyTitle')}</div><div style="font-size:12.5px;">${t('emptyDesc')}</div><button class="wp-btn wp-btn-primary" style="margin-top:16px;" onclick="openAdd()"><i class="fas fa-plus"></i><span>${t('addBtn')}</span></button></div></td></tr>`;
-        return;
-    }
-
-    container.innerHTML = items.map(item => {
-        const cat = CATS[item.kategori] || CATS['pelajaran'];
-        const catLabel = lang === 'id' ? cat.id : cat.en;
-        return `
-            <tr>
-                <td style="text-align:center;"><span class="wp-schedule-jam">${item.jamKe}</span></td>
-                <td>
-                    <div class="wp-schedule-item-name">${escapeHtml(item.mapel)}</div>
-                    <div class="wp-schedule-item-meta">
-                        ${item.waktu ? `<span><i class="fas fa-clock"></i>${escapeHtml(item.waktu)}</span>` : ''}
-                        ${item.guru && item.guru !== '-' ? `<span><i class="fas fa-user-tie"></i>${escapeHtml(item.guru)}</span>` : ''}
-                        ${item.catatan ? `<span><i class="fas fa-sticky-note"></i>${escapeHtml(item.catatan)}</span>` : ''}
-                    </div>
-                </td>
-                <td><span class="wp-pill ${cat.pill}"><i class="fas ${cat.icon}"></i>${catLabel}</span></td>
-                <td><div class="row-actions"><button class="row-action" onclick="openEdit(${item.id})">Edit</button><button class="row-action delete" onclick="deleteItem(${item.id})">Hapus</button></div></td>
-            </tr>
-        `;
-    }).join('');
-}
-
-function updateStats() {
-    let total = 0, mapel = 0, istirahat = 0, khusus = 0;
-    Object.values(scheduleData).forEach(items => items.forEach(i => {
-        total++;
-        if (i.kategori === 'pelajaran') mapel++;
-        else if (i.kategori === 'istirahat') istirahat++;
-        else khusus++;
-    }));
-    const tEl = document.getElementById('statTotal');
-    const mEl = document.getElementById('statMapel');
-    const iEl = document.getElementById('statIstirahat');
-    const kEl = document.getElementById('statKhusus');
-    if (tEl) tEl.textContent = total;
-    if (mEl) mEl.textContent = mapel;
-    if (iEl) iEl.textContent = istirahat;
-    if (kEl) kEl.textContent = khusus;
-}
-
-function renderPiket() {
-    const grid = document.getElementById('piketGrid');
-    if (!grid) return;
-    const lang = settings.language;
-    const todayName = getTodayDayName();
-    grid.innerHTML = DAYS.map(day => {
-        const items = piketData[day] || [];
-        const isToday = day === todayName;
-        const dayLabel = lang === 'id' ? day : DAYS_EN[DAYS.indexOf(day)];
-        return `
-            <div class="wp-piket-card ${isToday ? 'today' : ''}">
-                <div class="wp-piket-header">
-                    <div class="wp-piket-day">
-                        <i class="fas fa-calendar-day" style="font-size:13px;"></i>
-                        ${dayLabel}
-                        ${isToday ? `<span class="wp-piket-today-tag">TODAY</span>` : ''}
-                    </div>
-                    <div class="wp-piket-count">${items.length} ${lang === 'id' ? 'orang' : 'people'}</div>
-                </div>
-                <div class="wp-piket-body">
-                    ${items.length === 0 ? `<div class="wp-piket-empty"><i class="fas fa-user-slash"></i><div>${lang === 'id' ? 'Belum ada petugas' : 'No duty assigned'}</div></div>` : items.map(p => `
-                        <div class="wp-piket-person">
-                            <div class="wp-piket-avatar">${escapeHtml(p.nama.charAt(0).toUpperCase())}</div>
-                            <div class="wp-piket-info">
-                                <div class="wp-piket-name">${escapeHtml(p.nama)}</div>
-                                <div class="wp-piket-task">${escapeHtml(p.tugas || 'Petugas piket')}</div>
-                            </div>
-                            <div class="wp-piket-actions">
-                                <button class="wp-iconbtn" onclick="editPiket(${p.id}, '${day}')" title="Edit"><i class="fas fa-pen"></i></button>
-                                <button class="wp-iconbtn delete" onclick="deletePiket(${p.id}, '${day}')" title="Hapus"><i class="fas fa-trash"></i></button>
-                            </div>
-                        </div>
-                    `).join('')}
-                    <button class="wp-piket-add" onclick="openPiket('${day}')"><i class="fas fa-plus"></i><span>${lang === 'id' ? 'Tambah Petugas' : 'Add Person'}</span></button>
-                </div>
-            </div>
-        `;
-    }).join('');
-}
-
-function renderTaskCalendar() {
-    const lang = settings.language;
-    const monthNames = lang === 'id'
-        ? ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember']
-        : ['January','February','March','April','May','June','July','August','September','October','November','December'];
-    const year = taskCurrentMonth.getFullYear();
-    const month = taskCurrentMonth.getMonth();
-    const monthLabelEl = document.getElementById('taskMonthLabel');
-    if (monthLabelEl) monthLabelEl.textContent = `${monthNames[month]} ${year}`;
-
-    const grid = document.getElementById('taskCalGrid');
-    if (!grid) return;
-    const firstDay = new Date(year, month, 1).getDay();
-    const daysInMonth = new Date(year, month + 1, 0).getDate();
-    const today = new Date();
-
-    let html = '';
-    for (let i = 0; i < firstDay; i++) html += `<div class="wp-cal-cell empty"></div>`;
-
-    for (let d = 1; d <= daysInMonth; d++) {
-        const dateObj = new Date(year, month, d);
-        const dateStr = formatDate(dateObj);
-        const isToday = d === today.getDate() && month === today.getMonth() && year === today.getFullYear();
-        const isSelected = dateStr === formatDate(taskSelectedDate);
-        const isWeekend = dateObj.getDay() === 0 || dateObj.getDay() === 6;
-        const tasks = taskData[dateStr] || [];
-        const hasTasks = tasks.length > 0;
-        let cls = 'wp-cal-cell';
-        if (isToday) cls += ' today';
-        if (isSelected && !isToday) cls += ' selected';
-        if (isWeekend) cls += ' weekend';
-        if (hasTasks) cls += ' has-task';
-        html += `<div class="${cls}" onclick="selectTaskDate('${dateStr}')"><span>${d}</span>${hasTasks ? `<span class="wp-cal-task-badge">${tasks.length}</span>` : ''}</div>`;
-    }
-
-    grid.innerHTML = html;
-    renderTaskList();
-    updateNavCounts();
-}
-
-function selectTaskDate(dateStr) {
-    taskSelectedDate = new Date(dateStr + 'T00:00:00');
-    renderTaskCalendar();
-}
-
-function renderTaskList() {
-    const lang = settings.language;
-    const dateStr = formatDate(taskSelectedDate);
-    const tasks = taskData[dateStr] || [];
-    const dayNames = lang === 'id' ? ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'] : ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-    const monthNames = lang === 'id' ? ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'] : ['January','February','March','April','May','June','July','August','September','October','November','December'];
-
-    const dateEl = document.getElementById('taskPanelDate');
-    const dayEl = document.getElementById('taskPanelDay');
-    if (dateEl) dateEl.textContent = `${taskSelectedDate.getDate()} ${monthNames[taskSelectedDate.getMonth()]} ${taskSelectedDate.getFullYear()}`;
-    if (dayEl) dayEl.textContent = dayNames[taskSelectedDate.getDay()];
-
-    const listEl = document.getElementById('taskList');
-    if (!listEl) return;
-
-    if (tasks.length === 0) {
-        listEl.innerHTML = `<div class="wp-task-empty"><i class="fas fa-clipboard-check"></i><div>${lang === 'id' ? 'Belum ada tugas' : 'No tasks'}</div></div>`;
-    } else {
-        listEl.innerHTML = [...tasks].sort((a, b) => a.done - b.done).map(task => {
-            const priorityLabels = { high: lang === 'id' ? 'Tinggi' : 'High', medium: lang === 'id' ? 'Sedang' : 'Medium', low: lang === 'id' ? 'Rendah' : 'Low' };
-            const pillCls = { high: 'wp-pill-red', medium: 'wp-pill-orange', low: 'wp-pill-green' }[task.priority || 'medium'];
-            return `
-                <div class="wp-task-item ${task.done ? 'done' : ''} priority-${task.priority || 'medium'}">
-                    <div class="wp-task-check" onclick="toggleTask('${dateStr}', ${task.id})"><i class="fas fa-check"></i></div>
-                    <div class="wp-task-content">
-                        <div class="wp-task-name">${escapeHtml(task.name)}</div>
-                        ${task.desc ? `<div class="wp-task-desc">${escapeHtml(task.desc)}</div>` : ''}
-                        <div class="wp-task-meta">
-                            <span class="wp-pill ${pillCls}">${priorityLabels[task.priority || 'medium']}</span>
-                            ${task.subject ? `<span><i class="fas fa-book"></i> ${escapeHtml(task.subject)}</span>` : ''}
-                        </div>
-                    </div>
-                    <div class="wp-task-actions">
-                        <button class="wp-iconbtn" onclick="editTask('${dateStr}', ${task.id})" title="Edit"><i class="fas fa-pen"></i></button>
-                        <button class="wp-iconbtn delete" onclick="deleteTask('${dateStr}', ${task.id})" title="Hapus"><i class="fas fa-trash"></i></button>
-                    </div>
-                </div>
+    if (guruNames.length > 0) {
+        const availableGuru = guruNames.filter(g => !masterGuruLinks.includes(g));
+        if (availableGuru.length > 0) {
+            html += `
+                <select class="wp-master-link-select" id="masterGuruSelect" onchange="addGuruLinkFromSelect(this)">
+                    <option value="">+ Pilih Guru...</option>
+                    ${availableGuru.map(g => `<option value="${escapeHtml(g)}">${escapeHtml(g)}</option>`).join('')}
+                </select>
             `;
-        }).join('');
-    }
-
-    let totalAll = 0, doneAll = 0;
-    Object.values(taskData).forEach(arr => { totalAll += arr.length; doneAll += arr.filter(t => t.done).length; });
-    const ttEl = document.getElementById('taskStatTotal');
-    const tpEl = document.getElementById('taskStatPending');
-    const tdEl = document.getElementById('taskStatDone');
-    if (ttEl) ttEl.textContent = totalAll;
-    if (tpEl) tpEl.textContent = totalAll - doneAll;
-    if (tdEl) tdEl.textContent = doneAll;
-}
-
-function changeTaskMonth(delta) {
-    taskCurrentMonth.setMonth(taskCurrentMonth.getMonth() + delta);
-    renderTaskCalendar();
-}
-
-function goToTaskToday() {
-    taskCurrentMonth = new Date();
-    taskSelectedDate = new Date();
-    renderTaskCalendar();
-}
-
-function openAdd() {
-    editingId = null;
-    document.getElementById('modalTitle').textContent = t('modalAddTitle');
-    document.getElementById('saveBtnText').textContent = t('save');
-    document.getElementById('editId').value = '';
-    document.getElementById('scheduleForm').reset();
-    document.getElementById('fHari').value = currentDay;
-    document.querySelectorAll('.wp-cat-option').forEach(o => o.classList.remove('selected'));
-    document.querySelector('.wp-cat-option[data-value="pelajaran"]').classList.add('selected');
-    document.querySelector('input[name="kategori"][value="pelajaran"]').checked = true;
-    document.getElementById('modalOverlay').classList.add('show');
-    document.body.style.overflow = 'hidden';
-}
-
-function openEdit(id) {
-    let foundItem = null, foundDay = null;
-    for (const day of DAYS) {
-        const item = (scheduleData[day] || []).find(i => i.id === id);
-        if (item) { foundItem = item; foundDay = day; break; }
-    }
-    if (!foundItem) return;
-    editingId = id;
-    document.getElementById('modalTitle').textContent = t('modalEditTitle');
-    document.getElementById('saveBtnText').textContent = t('update');
-    document.getElementById('editId').value = id;
-    document.getElementById('fHari').value = foundDay;
-    document.getElementById('fJamKe').value = foundItem.jamKe;
-    document.getElementById('fWaktu').value = foundItem.waktu || '';
-    document.getElementById('fMapel').value = foundItem.mapel;
-    document.getElementById('fGuru').value = foundItem.guru || '';
-    document.getElementById('fCatatan').value = foundItem.catatan || '';
-    document.querySelectorAll('.wp-cat-option').forEach(o => o.classList.remove('selected'));
-    const opt = document.querySelector(`.wp-cat-option[data-value="${foundItem.kategori}"]`);
-    if (opt) { opt.classList.add('selected'); opt.querySelector('input').checked = true; }
-    document.getElementById('modalOverlay').classList.add('show');
-    document.body.style.overflow = 'hidden';
-}
-
-function closeModal() {
-    document.getElementById('modalOverlay').classList.remove('show');
-    document.body.style.overflow = '';
-    editingId = null;
-}
-
-function quickFill(text) { document.getElementById('fMapel').value = text; }
-
-function saveSchedule(e) {
-    if (e) e.preventDefault();
-    const hari = document.getElementById('fHari').value;
-    const jamKe = parseInt(document.getElementById('fJamKe').value);
-    const waktu = document.getElementById('fWaktu').value.trim();
-    const mapel = document.getElementById('fMapel').value.trim();
-    const guru = document.getElementById('fGuru').value.trim();
-    const catatan = document.getElementById('fCatatan').value.trim();
-    const katInput = document.querySelector('input[name="kategori"]:checked');
-    const kategori = katInput ? katInput.value : 'pelajaran';
-    if (!hari || !jamKe || !mapel) { showToast('error', t('validation'), t('fillAll')); return; }
-
-    if (editingId) {
-        for (const day of DAYS) {
-            const idx = (scheduleData[day] || []).findIndex(i => i.id === editingId);
-            if (idx !== -1) { scheduleData[day].splice(idx, 1); break; }
         }
-        if (!scheduleData[hari]) scheduleData[hari] = [];
-        const existIdx = scheduleData[hari].findIndex(i => i.jamKe === jamKe);
-        const newItem = { id: editingId, jamKe, mapel, kategori, waktu, guru, catatan };
-        if (existIdx !== -1) scheduleData[hari][existIdx] = newItem;
-        else scheduleData[hari].push(newItem);
-        showToast('success', t('updated'), t('updatedMsg'));
-    } else {
-        if (!scheduleData[hari]) scheduleData[hari] = [];
-        if (scheduleData[hari].find(i => i.jamKe === jamKe)) { showToast('warning', t('jamExists'), t('jamExistsMsg')); return; }
-        scheduleData[hari].push({ id: nextId++, jamKe, mapel, kategori, waktu, guru, catatan });
-        showToast('success', t('saved'), t('savedMsg'));
     }
-    scheduleData[hari].sort((a, b) => a.jamKe - b.jamKe);
-    saveScheduleToStorage();
-    renderDayTabs(); renderSchedule(); updateStats(); updateNavCounts();
-    renderDashboard(); renderCharts();
-    closeModal();
+
+    html += `
+        <button type="button" class="wp-master-link-add" onclick="openQuickAddTeacher()">
+            <i class="fas fa-user-plus"></i> Guru Baru
+        </button>
+    `;
+
+    container.innerHTML = html;
 }
 
-function deleteItem(id) {
-    let found = null, foundDay = null;
-    for (const day of DAYS) {
-        const item = (scheduleData[day] || []).find(i => i.id === id);
-        if (item) { found = item; foundDay = day; break; }
-    }
-    if (!found) return;
-    document.getElementById('confirmTitle').textContent = t('delete') + '?';
-    document.getElementById('confirmMsg').innerHTML = `${t('delete')} jadwal <strong>"${escapeHtml(found.mapel)}"</strong>?`;
-    document.getElementById('confirmBtnText').textContent = t('delete');
-    confirmCallback = () => {
-        const idx = scheduleData[foundDay].findIndex(i => i.id === id);
-        if (idx !== -1) {
-            scheduleData[foundDay].splice(idx, 1);
-            saveScheduleToStorage();
-            renderDayTabs(); renderSchedule(); updateStats(); updateNavCounts();
-            renderDashboard(); renderCharts();
-            showToast('success', t('deleted'), t('deletedMsg'));
-        }
-        closeConfirm();
-    };
-    document.getElementById('confirmOverlay').classList.add('show');
-    document.body.style.overflow = 'hidden';
-}
-
-function confirmAction() { if (confirmCallback) confirmCallback(); }
-
-function closeConfirm() {
-    document.getElementById('confirmOverlay').classList.remove('show');
-    document.body.style.overflow = '';
-    confirmCallback = null;
-}
-
-function clearDay() {
-    const items = scheduleData[currentDay] || [];
-    if (items.length === 0) return;
-    document.getElementById('confirmTitle').textContent = t('clearDay') + '?';
-    document.getElementById('confirmMsg').textContent = `${items.length} jadwal di hari ${currentDay} akan dihapus.`;
-    document.getElementById('confirmBtnText').textContent = t('delete');
-    confirmCallback = () => {
-        scheduleData[currentDay] = [];
-        saveScheduleToStorage();
-        renderDayTabs(); renderSchedule(); updateStats(); updateNavCounts();
-        renderDashboard(); renderCharts();
-        closeConfirm();
-        showToast('success', t('cleared'), t('clearedMsg'));
-    };
-    document.getElementById('confirmOverlay').classList.add('show');
-    document.body.style.overflow = 'hidden';
-}
-
-function resetAll() {
-    document.getElementById('confirmTitle').textContent = t('resetAll') + '?';
-    document.getElementById('confirmMsg').textContent = t('resetDoneMsg');
-    document.getElementById('confirmBtnText').textContent = t('resetAll');
-    confirmCallback = () => {
-        scheduleData = JSON.parse(JSON.stringify(DEFAULT_DATA));
-        saveScheduleToStorage();
-        renderDayTabs(); renderSchedule(); updateStats(); updateNavCounts();
-        renderDashboard(); renderCharts();
-        closeConfirm();
-        showToast('success', t('resetDone'), t('resetDoneMsg'));
-    };
-    document.getElementById('confirmOverlay').classList.add('show');
-    document.body.style.overflow = 'hidden';
-}
-
-function openPiket(day) {
-    piketEditId = null;
-    document.getElementById('piketEditId').value = '';
-    document.getElementById('piketForm').reset();
-    document.getElementById('piketHari').value = day || '';
-    document.getElementById('piketModalTitle').textContent = t('piketAddPerson');
-    document.getElementById('piketOverlay').classList.add('show');
-    document.body.style.overflow = 'hidden';
-}
-
-function closePiket() {
-    document.getElementById('piketOverlay').classList.remove('show');
-    document.body.style.overflow = '';
-    piketEditId = null;
-}
-
-function editPiket(id, day) {
-    const item = (piketData[day] || []).find(p => p.id === id);
-    if (!item) return;
-    piketEditId = id;
-    document.getElementById('piketEditId').value = id;
-    document.getElementById('piketHari').value = day;
-    document.getElementById('piketNama').value = item.nama;
-    document.getElementById('piketTugas').value = item.tugas || '';
-    document.getElementById('piketModalTitle').textContent = t('editProfile');
-    document.getElementById('piketOverlay').classList.add('show');
-    document.body.style.overflow = 'hidden';
-}
-
-function savePiket(e) {
-    if (e) e.preventDefault();
-    const hari = document.getElementById('piketHari').value;
-    const nama = document.getElementById('piketNama').value.trim();
-    const tugas = document.getElementById('piketTugas').value.trim();
-    if (!hari || !nama) { showToast('error', t('validation'), t('fillAll')); return; }
-    if (!piketData[hari]) piketData[hari] = [];
-    if (piketEditId) {
-        for (const day of DAYS) {
-            const idx = (piketData[day] || []).findIndex(p => p.id === piketEditId);
-            if (idx !== -1) { piketData[day].splice(idx, 1); break; }
-        }
-        piketData[hari].push({ id: piketEditId, nama, tugas });
-        showToast('success', t('updated'), t('updatedMsg'));
-    } else {
-        piketData[hari].push({ id: Date.now(), nama, tugas });
-        showToast('success', t('saved'), t('savedMsg'));
-    }
-    savePiketStorage();
-    closePiket();
-    renderPiket();
-    updateNavCounts();
-    renderDashPiket();
-}
-
-function deletePiket(id, day) {
-    const item = (piketData[day] || []).find(p => p.id === id);
-    if (!item) return;
-    document.getElementById('confirmTitle').textContent = t('delete') + '?';
-    document.getElementById('confirmMsg').innerHTML = `${t('delete')} <strong>"${escapeHtml(item.nama)}"</strong>?`;
-    document.getElementById('confirmBtnText').textContent = t('delete');
-    confirmCallback = () => {
-        const idx = piketData[day].findIndex(p => p.id === id);
-        if (idx !== -1) {
-            piketData[day].splice(idx, 1);
-            savePiketStorage();
-            renderPiket();
-            updateNavCounts();
-            renderDashPiket();
-            showToast('success', t('deleted'), t('deletedMsg'));
-        }
-        closeConfirm();
-    };
-    document.getElementById('confirmOverlay').classList.add('show');
-    document.body.style.overflow = 'hidden';
-}
-
-function openTask() {
-    taskEditId = null;
-    document.getElementById('taskEditId').value = '';
-    document.getElementById('taskForm').reset();
-    document.getElementById('taskDate').value = formatDate(taskSelectedDate);
-    document.getElementById('taskModalTitle').textContent = t('taskAddBtn');
-    document.getElementById('taskOverlay').classList.add('show');
-    document.body.style.overflow = 'hidden';
-}
-
-function closeTask() {
-    document.getElementById('taskOverlay').classList.remove('show');
-    document.body.style.overflow = '';
-    taskEditId = null;
-}
-
-function editTask(dateStr, id) {
-    const task = (taskData[dateStr] || []).find(t => t.id === id);
-    if (!task) return;
-    taskEditId = id;
-    document.getElementById('taskEditId').value = id;
-    document.getElementById('taskName').value = task.name;
-    document.getElementById('taskDesc').value = task.desc || '';
-    document.getElementById('taskDate').value = dateStr;
-    document.getElementById('taskPriority').value = task.priority || 'medium';
-    document.getElementById('taskSubject').value = task.subject || '';
-    document.getElementById('taskModalTitle').textContent = t('modalEditTitle');
-    document.getElementById('taskOverlay').classList.add('show');
-    document.body.style.overflow = 'hidden';
-}
-
-function saveTask(e) {
-    if (e) e.preventDefault();
-    const name = document.getElementById('taskName').value.trim();
-    const desc = document.getElementById('taskDesc').value.trim();
-    const dateStr = document.getElementById('taskDate').value;
-    const priority = document.getElementById('taskPriority').value;
-    const subject = document.getElementById('taskSubject').value.trim();
-    if (!name || !dateStr) { showToast('error', t('validation'), t('fillAll')); return; }
-
-    const oldDate = taskEditId ? findTaskDate(taskEditId) : null;
-    if (taskEditId && oldDate && oldDate !== dateStr) {
-        const oldIdx = taskData[oldDate].findIndex(t => t.id === taskEditId);
-        if (oldIdx !== -1) taskData[oldDate].splice(oldIdx, 1);
-    }
-    if (!taskData[dateStr]) taskData[dateStr] = [];
-
-    if (taskEditId) {
-        const idx = taskData[dateStr].findIndex(t => t.id === taskEditId);
-        const existing = idx !== -1 ? taskData[dateStr][idx] : {};
-        const newTask = { id: taskEditId, name, desc, priority, subject, done: existing.done || false };
-        if (idx !== -1) taskData[dateStr][idx] = newTask;
-        else taskData[dateStr].push(newTask);
-        showToast('success', t('updated'), t('updatedMsg'));
-    } else {
-        taskData[dateStr].push({ id: Date.now(), name, desc, priority, subject, done: false });
-        showToast('success', t('saved'), t('savedMsg'));
-    }
-    saveTasksStorage();
-    closeTask();
-    renderTaskCalendar();
-    renderDashboard();
-    renderCharts();
-}
-
-function findTaskDate(id) {
-    for (const date in taskData) {
-        if (taskData[date].find(t => t.id === id)) return date;
-    }
-    return null;
-}
-
-function toggleTask(dateStr, id) {
-    const task = (taskData[dateStr] || []).find(t => t.id === id);
-    if (!task) return;
-    task.done = !task.done;
-    saveTasksStorage();
-    renderTaskList();
-    renderTaskCalendar();
-    renderDashboard();
-    renderCharts();
-}
-
-function deleteTask(dateStr, id) {
-    const task = (taskData[dateStr] || []).find(t => t.id === id);
-    if (!task) return;
-    document.getElementById('confirmTitle').textContent = t('delete') + '?';
-    document.getElementById('confirmMsg').innerHTML = `${t('delete')} <strong>"${escapeHtml(task.name)}"</strong>?`;
-    document.getElementById('confirmBtnText').textContent = t('delete');
-    confirmCallback = () => {
-        const idx = taskData[dateStr].findIndex(t => t.id === id);
-        if (idx !== -1) {
-            taskData[dateStr].splice(idx, 1);
-            if (taskData[dateStr].length === 0) delete taskData[dateStr];
-            saveTasksStorage();
-            renderTaskCalendar();
-            renderDashboard();
-            renderCharts();
-            showToast('success', t('deleted'), t('deletedMsg'));
-        }
-        closeConfirm();
-    };
-    document.getElementById('confirmOverlay').classList.add('show');
-    document.body.style.overflow = 'hidden';
-}
-
-function openSettings() {
-    document.getElementById('darkToggle').checked = settings.darkMode;
-    document.querySelectorAll('.wp-lang-option').forEach(o => o.classList.toggle('selected', o.dataset.lang === settings.language));
-    document.getElementById('settingsOverlay').classList.add('show');
-    document.body.style.overflow = 'hidden';
-}
-
-function closeSettings() {
-    document.getElementById('settingsOverlay').classList.remove('show');
-    document.body.style.overflow = '';
-}
-
-function openProfile() {
-    document.getElementById('pName').value = currentUser.name;
-    document.getElementById('pUsername').value = currentUser.username;
-    document.getElementById('pKelas').value = currentUser.kelas || '';
-    document.getElementById('profileOverlay').classList.add('show');
-    document.body.style.overflow = 'hidden';
-}
-
-function closeProfile() {
-    document.getElementById('profileOverlay').classList.remove('show');
-    document.body.style.overflow = '';
-}
-
-function saveProfile() {
-    const newName = document.getElementById('pName').value.trim();
-    const newUsername = document.getElementById('pUsername').value.trim().toLowerCase();
-    const newKelas = document.getElementById('pKelas').value.trim();
-    if (!newName || !newUsername) { showToast('error', t('validation'), t('fillAll')); return; }
-    const idx = users.findIndex(u => u.username === currentUser.username);
-    if (idx === -1) return;
-    if (newUsername !== currentUser.username && users.find(u => u.username === newUsername)) {
-        showToast('error', t('error'), 'Username sudah dipakai');
-        return;
-    }
-    const oldUsername = currentUser.username;
-    if (newUsername !== oldUsername) {
-        ['data', 'piket', 'tasks'].forEach(type => {
-            const oldData = localStorage.getItem(`jadwalku_${type}_${oldUsername}`);
-            if (oldData) {
-                localStorage.setItem(`jadwalku_${type}_${newUsername}`, oldData);
-                localStorage.removeItem(`jadwalku_${type}_${oldUsername}`);
-            }
-        });
-        localStorage.setItem('jadwalku_session', newUsername);
-    }
-    users[idx] = { ...users[idx], name: newName, username: newUsername, kelas: newKelas };
-    localStorage.setItem('jadwalku_users', JSON.stringify(users));
-    currentUser = users[idx];
-    updateUserUI();
-    closeProfile();
-    showToast('success', t('profileSaved'), t('profileSavedMsg'));
-}
-
-function handleLogout() { handleLogoutConfirm(); }
-
-function handleLogoutConfirm() {
-    document.getElementById('confirmTitle').textContent = t('logout') + '?';
-    document.getElementById('confirmMsg').textContent = t('logoutConfirm');
-    document.getElementById('confirmBtnText').textContent = t('logout');
-    confirmCallback = () => {
-        saveScheduleToStorage(); savePiketStorage(); saveTasksStorage();
-        localStorage.removeItem('jadwalku_session');
-        window.location.href = 'login.html';
-    };
-    document.getElementById('confirmOverlay').classList.add('show');
-    document.body.style.overflow = 'hidden';
-}
-
-function exportData() {
-    let csv = 'Hari,Jam Ke,Waktu,Mata Pelajaran,Kategori,Guru,Catatan\n';
-    DAYS.forEach(day => {
-        (scheduleData[day] || []).sort((a, b) => a.jamKe - b.jamKe).forEach(i => {
-            const cat = CATS[i.kategori] || CATS['pelajaran'];
-            csv += `"${day}",${i.jamKe},"${i.waktu || ''}","${i.mapel}","${cat.id}","${i.guru || ''}","${i.catatan || ''}"\n`;
-        });
-    });
-    const blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8;' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `jadwal-${currentUser.username}-${new Date().toISOString().split('T')[0]}.csv`;
-    document.body.appendChild(a); a.click(); document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-    showToast('success', t('exported'), t('exportedMsg'));
-}
-
-function showToast(type, title, msg) {
-    const container = document.getElementById('toastContainer');
-    const icons = { success: 'fa-check', error: 'fa-times', warning: 'fa-exclamation', info: 'fa-info' };
-    const toast = document.createElement('div');
-    toast.className = `wp-toast ${type}`;
-    toast.innerHTML = `<div class="wp-toast-icon"><i class="fas ${icons[type] || 'fa-info'}"></i></div><div class="wp-toast-body"><div class="wp-toast-title">${escapeHtml(title)}</div>${msg ? `<div class="wp-toast-msg">${escapeHtml(msg)}</div>` : ''}</div>`;
-    container.appendChild(toast);
-    setTimeout(() => {
-        toast.style.opacity = '0';
-        toast.style.transform = 'translateX(30px)';
-        toast.style.transition = '0.3s';
-        setTimeout(() => toast.remove(), 300);
-    }, 3000);
-}
-
-function setupListeners() {
-    document.querySelectorAll('.wp-filter-chip').forEach(chip => {
-        chip.addEventListener('click', () => {
-            document.querySelectorAll('.wp-filter-chip').forEach(c => c.classList.remove('active'));
-            chip.classList.add('active');
-            currentFilter = chip.dataset.filter;
-            renderSchedule();
-        });
-    });
-    document.querySelectorAll('.wp-cat-option').forEach(opt => {
-        opt.addEventListener('click', () => {
-            document.querySelectorAll('.wp-cat-option').forEach(o => o.classList.remove('selected'));
-            opt.classList.add('selected');
-            opt.querySelector('input').checked = true;
-        });
-    });
-    ['modalOverlay', 'settingsOverlay', 'profileOverlay', 'confirmOverlay', 'piketOverlay', 'taskOverlay'].forEach(id => {
-        document.getElementById(id)?.addEventListener('click', (e) => {
-            if (e.target.id === id) {
-                if (id === 'modalOverlay') closeModal();
-                else if (id === 'settingsOverlay') closeSettings();
-                else if (id === 'profileOverlay') closeProfile();
-                else if (id === 'confirmOverlay') closeConfirm();
-                else if (id === 'piketOverlay') closePiket();
-                else if (id === 'taskOverlay') closeTask();
-            }
-        });
-    });
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') {
-            closeModal(); closeSettings(); closeProfile(); closeConfirm(); closePiket(); closeTask();
-        }
-    });
-    document.addEventListener('click', (e) => {
-        const sidebar = document.getElementById('wpSidebar');
-        const toggle = document.querySelector('.wp-menu-toggle');
-        if (window.innerWidth <= 768 && sidebar.classList.contains('open')) {
-            if (!sidebar.contains(e.target) && !toggle.contains(e.target)) sidebar.classList.remove('open');
-        }
-    });
-    window.addEventListener('popstate', () => showPage(getPageFromURL()));
-    window.addEventListener('resize', () => {
-        if (currentPage === 'dashboard') renderCharts();
-    });
-}
-
-document.addEventListener('DOMContentLoaded', init);
-window.addEventListener('beforeunload', () => {
-    if (currentUser) { saveScheduleToStorage(); savePiketStorage(); saveTasksStorage(); }
-});
-</script>
-</body>
-</html>
+function addGuruLinkFromSelect(selectEl) {
+    const name = selectEl.value;
+    if (!name) return;
+    if (!masterGuruLinks.includes(name)) {
+        masterGuruLinks.push(name);
+        renderMasterGuruLinks();
+        updateMasterPreview();
+   
