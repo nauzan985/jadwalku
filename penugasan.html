@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kalender Penugasan - JadwalKu</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+    --primary: #4f46e5; --primary-light: #eef2ff; --primary-lighter: #f5f7ff;
+    --purple: #9333ea; --purple-light: #faf5ff; --green: #10b981; --green-light: #ecfdf5;
+    --orange: #f59e0b; --orange-light: #fffbeb; --red: #ef4444; --red-light: #fef2f2;
+    --bg: #f8fafc; --white: #ffffff;
+    --gray-50: #f9fafb; --gray-100: #f3f4f6; --gray-200: #e5e7eb; --gray-300: #d1d5db;
+    --gray-400: #9ca3af; --gray-500: #6b7280; --gray-600: #4b5563;
+    --text: #111827; --text-light: #4b5563; --text-muted: #6b7280;
+    --border: #e5e7eb; --border-dark: #d1d5db;
+    --shadow-xs: 0 1px 2px rgba(0,0,0,0.04);
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
+    --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Inter', sans-serif;
+    --sidebar-width: 240px; --topbar-height: 56px;
+    --radius-md: 10px; --radius-lg: 14px;
+}
+body.dark-mode {
+    --bg: #0f172a; --white: #1e293b; --gray-50: #1a2332; --gray-100: #233044;
+    --gray-200: #334155; --gray-300: #475569; --gray-600: #cbd5e1;
+    --text: #f1f5f9; --text-light: #cbd5e1; --text-muted: #94a3b8;
+    --border: #334155; --border-dark: #475569;
+    --primary-light: #1e3a8a; --primary-lighter: #1e293b;
+    --green-light: #064e3b; --red-light: #7f1d1d; --orange-light: #78350f; --purple-light: #4c1d95;
+}
+body { font-family: var(--font-sans); background: var(--bg); color: var(--text);
+    line-height: 1.5; font-size: 14px; min-height: 100vh; }
+.wp-layout { display: flex; min-height: 100vh; }
+.wp-sidebar { width: var(--sidebar-width);
+    background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%); color: #f1f5f9;
+    position: fixed; top: 0; left: 0; height: 100vh; display: flex;
+    flex-direction: column; z-index: 100; overflow-y: auto;
+    box-shadow: 4px 0 20px rgba(0,0,0,0.08); transition: transform 0.3s; }
+.wp-sidebar-header { padding: 20px 22px; border-bottom: 1px solid rgba(255,255,255,0.06);
+    display: flex; align-items: center; gap: 12px; cursor: pointer; }
+.wp-sidebar-header:hover { background: rgba(255,255,255,0.04); }
+.wp-logo-mark { width: 38px; height: 38px;
+    background: linear-gradient(135deg, #6366f1, #a855f7); border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    color: #fff; font-size: 17px; box-shadow: 0 4px 12px rgba(99,102,241,0.4); }
+.wp-logo-text h1 { font-size: 15px; font-weight: 700; color: #fff; line-height: 1.2; }
+.wp-logo-text span { font-size: 10px; color: #64748b; letter-spacing: 0.5px;
+    text-transform: uppercase; font-weight: 600; }
+.wp-sidebar-user { padding: 16px 22px; border-bottom: 1px solid rgba(255,255,255,0.06);
+    display: flex; align-items: center; gap: 12px; }
+.wp-sidebar-avatar { width: 40px; height: 40px; border-radius: 50%;
+    background: linear-gradient(135deg, #6366f1, #a855f7); color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 15px; font-weight: 700; }
+.wp-sidebar-user-info { flex: 1; min-width: 0; }
+.wp-sidebar-user-name { font-size: 13px; font-weight: 600; color: #fff; margin-bottom: 2px;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.wp-sidebar-user-role { font-size: 11px; color: #64748b; }
+.wp-nav { flex: 1; padding: 12px 0; }
+.wp-nav-section { padding: 16px 22px 8px; font-size: 10px; font-weight: 700;
+    color: #475569; text-transform: uppercase; letter-spacing: 1px; }
+.wp-nav-item { display: flex; align-items: center; gap: 12px; padding: 11px 22px;
+    color: #cbd5e1; text-decoration: none; font-size: 13.5px; font-weight: 500;
+    cursor: pointer; transition: all 0.2s ease; margin: 2px 10px; border-radius: 8px; }
+.wp-nav-item:hover { background: rgba(255,255,255,0.06); color: #fff; transform: translateX(2px); }
+.wp-nav-item.active { background: linear-gradient(135deg, rgba(99,102,241,0.9), rgba(168,85,247,0.9));
+    color: #fff; font-weight: 600; box-shadow: 0 6px 20px rgba(99,102,241,0.4); }
+.wp-nav-item i { width: 20px; text-align: center; font-size: 15px; }
+.wp-nav-item .wp-nav-count { margin-left: auto; background: rgba(255,255,255,0.12);
+    color: #e2e8f0; font-size: 10px; font-weight: 700; padding: 2px 8px;
+    border-radius: 10px; min-width: 22px; text-align: center; }
+.wp-nav-item.active .wp-nav-count { background: rgba(255,255,255,0.25); color: #fff; }
+.wp-sidebar-footer { padding: 16px 22px; border-top: 1px solid rgba(255,255,255,0.06);
+    font-size: 11px; color: #64748b; }
+.wp-main { flex: 1; margin-left: var(--sidebar-width); min-width: 0;
+    display: flex; flex-direction: column; min-height: 100vh;
+    width: calc(100% - var(--sidebar-width)); }
+.wp-topbar { background: rgba(255,255,255,0.85); backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border); padding: 0 32px;
+    height: var(--topbar-height); display: flex; align-items: center;
+    justify-content: space-between; position: sticky; top: 0; z-index: 50; }
+body.dark-mode .wp-topbar { background: rgba(30,41,59,0.85); }
+.wp-topbar-left { display: flex; align-items: center; gap: 14px; }
+.wp-menu-toggle { display: none; background: none; border: none;
+    color: var(--text); font-size: 18px; cursor: pointer; padding: 8px; border-radius: 8px; }
+.wp-breadcrumb { display: flex; align-items: center; gap: 8px;
+    font-size: 13px; color: var(--text-muted); }
+.wp-breadcrumb a { color: var(--primary); text-decoration: none; cursor: pointer;
+    padding: 4px 8px; border-radius: 6px; }
+.wp-breadcrumb a:hover { background: var(--primary-light); }
+.wp-breadcrumb .sep { color: var(--gray-400); font-size: 9px; }
+.wp-breadcrumb-current { color: var(--text); font-weight: 600; }
+.wp-topbar-right { display: flex; align-items: center; gap: 6px; }
+.wp-topbar-btn { width: 36px; height: 36px; background: none; border: none;
+    border-radius: 8px; cursor: pointer; color: var(--text-light);
+    font-size: 15px; display: flex; align-items: center;
+    justify-content: center; transition: all 0.15s ease; }
+.wp-topbar-btn:hover { background: var(--primary-light); color: var(--primary); }
+.wp-content { padding: 28px 32px; flex: 1; }
+.wp-page-header { display: flex; align-items: flex-start;
+    justify-content: space-between; gap: 16px; margin-bottom: 24px; flex-wrap: wrap; }
+.wp-page-title { font-size: 26px; font-weight: 700; color: var(--text);
+    line-height: 1.2; margin-bottom: 4px; letter-spacing: -0.5px; }
+.wp-page-subtitle { font-size: 13px; color: var(--text-muted); }
+.wp-btn { display: inline-flex; align-items: center; justify-content: center;
+    gap: 7px; padding: 9px 16px; font-family: var(--font-sans); font-size: 13px;
+    font-weight: 600; border-radius: 8px; cursor: pointer;
+    transition: all 0.2s ease; text-decoration: none; border: 1px solid;
+    white-space: nowrap; min-height: 36px; }
+.wp-btn-primary { background: linear-gradient(135deg, #4f46e5, #7c3aed);
+    color: #fff; border-color: transparent; box-shadow: 0 4px 14px rgba(79,70,229,0.3); }
+.wp-btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(79,70,229,0.4); }
+.wp-btn-ghost { background: var(--white); color: var(--text-light); border-color: var(--border); }
+.wp-btn-ghost:hover { background: var(--gray-50); color: var(--primary); border-color: var(--primary); }
+.wp-btn-danger { background: var(--white); color: var(--red); border-color: var(--red); }
+.wp-btn-danger:hover { background: var(--red); color: #fff; }
+.wp-card { background: var(--white); border: 1px solid var(--border);
+    border-radius: var(--radius-md); box-shadow: var(--shadow-xs); overflow: hidden; }
+.wp-task-layout { display: grid; grid-template-columns: 1fr 420px;
+    gap: 20px; align-items: start; }
+.wp-cal-header { padding: 16px 20px; border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 12px; flex-wrap: wrap; }
+.wp-cal-title { font-size: 15px; font-weight: 700;
+    display: flex; align-items: center; gap: 9px; }
+.wp-cal-title i { color: var(--primary); }
+.wp-cal-nav { display: flex; align-items: center; gap: 8px; }
+.wp-cal-nav-btn { width: 32px; height: 32px; border: 1px solid var(--border);
+    background: var(--white); border-radius: 6px; cursor: pointer;
+    color: var(--text-light); display: flex; align-items: center;
+    justify-content: center; font-size: 12px; transition: all 0.2s ease; }
+.wp-cal-nav-btn:hover { background: var(--primary); color: #fff;
+    border-color: var(--primary); transform: scale(1.05); }
+.wp-cal-month-label { min-width: 140px; text-align: center;
+    font-size: 14px; font-weight: 700; color: var(--text); }
+.wp-cal-grid-header { display: grid; grid-template-columns: repeat(7, 1fr);
+    padding: 16px 20px 6px; gap: 4px; }
+.wp-cal-day-label { text-align: center; font-size: 10.5px; font-weight: 800;
+    color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+.wp-cal-day-label.sun, .wp-cal-day-label.sat { color: var(--red); }
+.wp-cal-grid { display: grid; grid-template-columns: repeat(7, 1fr);
+    gap: 4px; padding: 0 20px 20px; }
+.wp-cal-cell { aspect-ratio: 1; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; background: var(--gray-50);
+    border: 1.5px solid transparent; border-radius: 8px; cursor: pointer;
+    font-size: 13px; font-weight: 600; color: var(--text);
+    transition: all 0.2s ease; position: relative; padding: 3px; }
+.wp-cal-cell:hover:not(.empty) { background: var(--white);
+    border-color: var(--primary); color: var(--primary); transform: scale(1.05); }
+.wp-cal-cell.empty { background: transparent; cursor: default; pointer-events: none; }
+.wp-cal-cell.weekend { color: var(--red); }
+.wp-cal-cell.today { background: linear-gradient(135deg, #4f46e5, #7c3aed);
+    color: #fff; font-weight: 800; box-shadow: 0 6px 16px rgba(79,70,229,0.4); }
+.wp-cal-cell.selected { border-color: var(--primary);
+    background: linear-gradient(135deg, var(--primary-light), var(--purple-light));
+    color: var(--primary-dark); font-weight: 700;
+    box-shadow: 0 4px 12px rgba(79,70,229,0.15); }
+.wp-cal-cell.selected.today { background: linear-gradient(135deg, #4f46e5, #7c3aed);
+    color: #fff; border-color: transparent;
+    box-shadow: 0 0 0 3px var(--primary-light), 0 6px 16px rgba(79,70,229,0.4); }
+.wp-cal-cell.has-task { background: linear-gradient(135deg, #fffbeb, #fef3c7);
+    border-color: rgba(245,158,11,0.4); }
+.wp-cal-cell.today.has-task { background: linear-gradient(135deg, #4f46e5, #7c3aed); }
+.wp-cal-task-badge { position: absolute; top: 3px; right: 3px;
+    background: linear-gradient(135deg, #f59e0b, #fbbf24); color: #fff;
+    font-size: 9px; font-weight: 800; padding: 1px 5px; border-radius: 50px;
+    min-width: 14px; text-align: center; line-height: 1.4;
+    box-shadow: 0 2px 6px rgba(245,158,11,0.4); }
+.wp-cal-cell.today .wp-cal-task-badge { background: rgba(255,255,255,0.35); box-shadow: none; }
+.wp-task-panel-header { padding: 16px 20px; border-bottom: 1px solid var(--border);
+    background: linear-gradient(135deg, var(--gray-50), var(--white)); }
+.wp-task-panel-date { font-size: 16px; font-weight: 800; color: var(--text);
+    margin-bottom: 2px; letter-spacing: -0.3px; }
+.wp-task-panel-day { font-size: 11px; color: var(--text-muted);
+    text-transform: uppercase; letter-spacing: 0.6px; font-weight: 700; }
+.wp-task-list { padding: 14px 20px; max-height: 420px; overflow-y: auto; }
+.wp-task-item { display: flex; align-items: flex-start; gap: 12px;
+    padding: 12px; background: var(--gray-50); border: 1px solid var(--border);
+    border-left: 4px solid var(--orange); border-radius: 8px;
+    margin-bottom: 10px; transition: all 0.2s ease; }
+.wp-task-item:last-child { margin-bottom: 0; }
+.wp-task-item:hover { background: var(--white); transform: translateX(4px);
+    box-shadow: var(--shadow-sm); }
+.wp-task-item.done { opacity: 0.55; }
+.wp-task-item.done .wp-task-name { text-decoration: line-through; color: var(--text-muted); }
+.wp-task-item.priority-high { border-left-color: var(--red); }
+.wp-task-item.priority-medium { border-left-color: var(--orange); }
+.wp-task-item.priority-low { border-left-color: var(--green); }
+.wp-task-check { width: 20px; height: 20px; border: 2px solid var(--border-dark);
+    border-radius: 6px; flex-shrink: 0; cursor: pointer; display: flex;
+    align-items: center; justify-content: center; margin-top: 2px;
+    transition: all 0.2s ease; background: var(--white); color: #fff; }
+.wp-task-check:hover { border-color: var(--primary); transform: scale(1.1); }
+.wp-task-item.done .wp-task-check { background: linear-gradient(135deg, #10b981, #34d399);
+    border-color: var(--green); }
+.wp-task-check i { font-size: 11px; opacity: 0; transition: opacity 0.15s; }
+.wp-task-item.done .wp-task-check i { opacity: 1; }
+.wp-task-content { flex: 1; min-width: 0; }
+.wp-task-name { font-size: 13.5px; font-weight: 700; color: var(--text);
+    margin-bottom: 3px; word-break: break-word; }
+.wp-task-desc { font-size: 11.5px; color: var(--text-muted);
+    margin-bottom: 6px; word-break: break-word; }
+.wp-task-meta { display: flex; gap: 10px; font-size: 10.5px;
+    color: var(--text-muted); flex-wrap: wrap; align-items: center; }
+.wp-task-actions { display: flex; gap: 4px; opacity: 0; transition: opacity 0.2s ease; }
+.wp-task-item:hover .wp-task-actions { opacity: 1; }
+.wp-task-empty { text-align: center; padding: 40px 20px;
+    color: var(--text-muted); font-size: 12.5px; }
+.wp-task-empty i { display: block; font-size: 42px; margin-bottom: 12px;
+    opacity: 0.25; color: var(--primary); }
+.wp-task-stats { display: grid; grid-template-columns: repeat(3, 1fr);
+    border-top: 1px solid var(--border); background: var(--gray-50); }
+.wp-task-stat { text-align: center; padding: 16px 10px;
+    border-right: 1px solid var(--border); }
+.wp-task-stat:last-child { border-right: none; }
+.wp-task-stat-value { font-size: 22px; font-weight: 800;
+    line-height: 1; margin-bottom: 4px; letter-spacing: -0.5px; }
+.wp-task-stat-label { font-size: 10px; color: var(--text-muted);
+    text-transform: uppercase; letter-spacing: 0.5px; font-weight: 700; }
+.wp-task-stat.total .wp-task-stat-value { color: var(--primary); }
+.wp-task-stat.pending .wp-task-stat-value { color: var(--orange); }
+.wp-task-stat.done .wp-task-stat-value { color: var(--green); }
+.wp-task-add-area { padding: 14px 20px; border-top: 1px solid var(--border); }
+.wp-task-add-btn { width: 100%; padding: 11px;
+    background: linear-gradient(135deg, #4f46e5, #7c3aed); color: #fff;
+    border: none; border-radius: 8px; font-family: var(--font-sans);
+    font-size: 13px; font-weight: 700; cursor: pointer;
+    transition: all 0.2s ease; display: flex; align-items: center;
+    justify-content: center; gap: 7px; box-shadow: 0 4px 14px rgba(79,70,229,0.3); }
+.wp-task-add-btn:hover { transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(79,70,229,0.4); }
+.wp-iconbtn { width: 28px; height: 28px; border: 1px solid var(--border);
+    background: var(--white); border-radius: 6px; display: flex;
+    align-items: center; justify-content: center; cursor: pointer;
+    color: var(--text-muted); font-size: 11px; transition: all 0.2s ease; }
+.wp-iconbtn:hover { background: var(--primary); color: #fff;
+    border-color: var(--primary); transform: scale(1.1); }
+.wp-iconbtn.delete:hover { background: var(--red); border-color: var(--red); }
+.wp-modal-overlay { position: fixed; inset: 0; background: rgba(15,23,42,0.6);
+    backdrop-filter: blur(6px); z-index: 1000; display: none;
+    align-items: center; justify-content: center; padding: 20px; }
+.wp-modal-overlay.show { display: flex; }
+.wp-modal { background: var(--white); border-radius: var(--radius-lg);
+    width: 100%; max-width: 600px; max-height: 90vh; overflow-y: auto;
+    box-shadow: 0 25px 60px rgba(0,0,0,0.25);
+    animation: wpModalIn 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+@keyframes wpModalIn {
+    from { opacity: 0; transform: translateY(-20px) scale(0.96); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+.wp-modal-header { padding: 20px 24px; border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between; }
+.wp-modal-title { font-size: 17px; font-weight: 700; }
+.wp-modal-close { width: 32px; height: 32px; background: var(--gray-100);
+    border: none; border-radius: 8px; cursor: pointer; color: var(--text-muted);
+    font-size: 14px; display: flex; align-items: center;
+    justify-content: center; transition: all 0.2s ease; }
+.wp-modal-close:hover { background: var(--red-light); color: var(--red); transform: rotate(90deg); }
+.wp-modal-body { padding: 24px; }
+.wp-modal-footer { padding: 16px 24px; border-top: 1px solid var(--border);
+    background: var(--gray-50); display: flex; gap: 10px; justify-content: flex-end; }
+.wp-form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.wp-form-group { margin-bottom: 16px; }
+.wp-form-label { display: block; font-size: 12.5px; font-weight: 700;
+    margin-bottom: 7px; color: var(--text); }
+.wp-form-label .req { color: var(--red); }
+.wp-input, .wp-select { width: 100%; padding: 10px 14px;
+    border: 1.5px solid var(--border); border-radius: 8px;
+    font-family: var(--font-sans); font-size: 13.5px; color: var(--text);
+    background: var(--white); outline: none; transition: all 0.2s ease; min-height: 40px; }
+.wp-input:focus, .wp-select:focus { border-color: var(--primary);
+    box-shadow: 0 0 0 4px var(--primary-light); }
+.wp-toast-container { position: fixed; top: 70px; right: 24px;
+    z-index: 2000; display: flex; flex-direction: column; gap: 10px; }
+.wp-toast { display: flex; align-items: center; gap: 12px;
+    padding: 14px 18px; background: var(--white); border: 1px solid var(--border);
+    border-left: 4px solid var(--primary); border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.12); min-width: 280px;
+    animation: wpToastIn 0.35s cubic-bezier(0.4, 0, 0.2, 1); font-size: 13.5px; }
+@keyframes wpToastIn {
+    from { opacity: 0; transform: translateX(40px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+.wp-toast.success { border-left-color: var(--green); }
+.wp-toast.error { border-left-color: var(--red); }
+.wp-toast-icon { width: 26px; height: 26px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    color: #fff; font-size: 11px; flex-shrink: 0; }
+.wp-toast.info .wp-toast-icon { background: linear-gradient(135deg, #4f46e5, #6366f1); }
+.wp-toast.success .wp-toast-icon { background: linear-gradient(135deg, #10b981, #34d399); }
+.wp-toast.error .wp-toast-icon { background: linear-gradient(135deg, #ef4444, #f87171); }
+.wp-toast-title { font-size: 13.5px; font-weight: 700; }
+.wp-toast-msg { font-size: 11.5px; color: var(--text-muted); margin-top: 2px; }
+@media (max-width: 900px) {
+    .wp-task-layout { grid-template-columns: 1fr; }
+}
+@media (max-width: 768px) {
+    .wp-sidebar { transform: translateX(-100%); }
+    .wp-sidebar.open { transform: translateX(0); }
+    .wp-main { margin-left: 0; width: 100%; }
+    .wp-menu-toggle { display: flex; }
+    .wp-content { padding: 18px; }
+    .wp-topbar { padding: 0 18px; }
+    .wp-form-row { grid-template-columns: 1fr; }
+    .wp-toast-container { left: 16px; right: 16px; }
+    .wp-page-title { font-size: 22px; }
+}
+</style>
+</head>
+<body>
+
+<div class="wp-layout">
+    <aside class="wp-sidebar" id="wpSidebar">
+        <div class="wp-sidebar-header" onclick="location.href='index.html'">
+            <div class="wp-logo-mark"><i class="fas fa-calendar-alt"></i></div>
+            <div class="wp-logo-text">
+                <h1>JadwalKu</h1>
+                <span>Student Schedule</span>
+            </div>
+        </div>
+        <div class="wp-sidebar-user">
+            <div class="wp-sidebar-avatar" id="userAvatar">U</div>
+            <div class="wp-sidebar-user-info">
+                <div class="wp-sidebar-user-name" id="userName">User</div>
+                <div class="wp-sidebar-user-role">Siswa</div>
+            </div>
+        </div>
+        <nav class="wp-nav">
+            <div class="wp-nav-section">Menu Utama</div>
+            <a class="wp-nav-item" href="index.html">
+                <i class="fas fa-th-large"></i><span>Dashboard</span>
+            </a>
+            <a class="wp-nav-item" href="index.html#jadwal_pelajaran">
+                <i class="fas fa-calendar-alt"></i><span>Jadwal Pelajaran</span>
+            </a>
+            <a class="wp-nav-item" href="piket.html">
+                <i class="fas fa-broom"></i><span>Jadwal Piket</span>
+            </a>
+            <a class="wp-nav-item active">
+                <i class="fas fa-tasks"></i><span>Penugasan</span>
+                <span class="wp-nav-count" id="navTaskCount">0</span>
+            </a>
+        </nav>
+        <div class="wp-sidebar-footer">
+            <div>JadwalKu v2.2</div>
+            <div style="margin-top:4px;">© 2024 · Bagian 3 dari 3</div>
+        </div>
+    </aside>
+
+    <div class="wp-main">
+        <div class="wp-topbar">
+            <div class="wp-topbar-left">
+                <button class="wp-menu-toggle" onclick="toggleSidebar()">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="wp-breadcrumb">
+                    <a href="index.html"><i class="fas fa-home" style="font-size:12px;"></i></a>
+                    <i class="fas fa-chevron-right sep"></i>
+                    <span class="wp-breadcrumb-current">Kalender Penugasan</span>
+                </div>
+            </div>
+            <div class="wp-topbar-right">
+                <button class="wp-topbar-btn" onclick="toggleTheme()" id="themeBtn"><i class="fas fa-moon"></i></button>
+            </div>
+        </div>
+
+        <div class="wp-content">
+            <div class="wp-page-header">
+                <div>
+                    <h1 class="wp-page-title">Kalender Penugasan</h1>
+                    <p class="wp-page-subtitle">Kelola tugas dan PR kamu</p>
+                </div>
+            </div>
+
+            <div class="wp-task-layout">
+                <div class="wp-card">
+                    <div class="wp-cal-header">
+                        <div class="wp-cal-title">
+                            <i class="fas fa-calendar-check"></i>
+                            <span>Kalender</span>
+                        </div>
+                        <div class="wp-cal-nav">
+                            <button class="wp-cal-nav-btn" onclick="changeTaskMonth(-1)"><i class="fas fa-chevron-left"></i></button>
+                            <div class="wp-cal-month-label" id="taskMonthLabel">-</div>
+                            <button class="wp-cal-nav-btn" onclick="changeTaskMonth(1)"><i class="fas fa-chevron-right"></i></button>
+                            <button class="wp-cal-nav-btn" onclick="goToTaskToday()" title="Hari ini"><i class="fas fa-crosshairs"></i></button>
+                        </div>
+                    </div>
+                    <div class="wp-cal-grid-header">
+                        <div class="wp-cal-day-label sun">Min</div>
+                        <div class="wp-cal-day-label">Sen</div>
+                        <div class="wp-cal-day-label">Sel</div>
+                        <div class="wp-cal-day-label">Rab</div>
+                        <div class="wp-cal-day-label">Kam</div>
+                        <div class="wp-cal-day-label">Jum</div>
+                        <div class="wp-cal-day-label sat">Sab</div>
+                    </div>
+                    <div class="wp-cal-grid" id="taskCalGrid"></div>
+                </div>
+
+                <div class="wp-card">
+                    <div class="wp-task-panel-header">
+                        <div class="wp-task-panel-date" id="taskPanelDate">-</div>
+                        <div class="wp-task-panel-day" id="taskPanelDay">-</div>
+                    </div>
+                    <div class="wp-task-list" id="taskList"></div>
+                    <div class="wp-task-stats">
+                        <div class="wp-task-stat total">
+                            <div class="wp-task-stat-value" id="taskStatTotal">0</div>
+                            <div class="wp-task-stat-label">Total</div>
+                        </div>
+                        <div class="wp-task-stat pending">
+                            <div class="wp-task-stat-value" id="taskStatPending">0</div>
+                            <div class="wp-task-stat-label">Aktif</div>
+                        </div>
+                        <div class="wp-task-stat done">
+                            <div class="wp-task-stat-value" id="taskStatDone">0</div>
+                            <div class="wp-task-stat-label">Selesai</div>
+                        </div>
+                    </div>
+                    <div class="wp-task-add-area">
+                        <button class="wp-task-add-btn" onclick="openTask()">
+                            <i class="fas fa-plus"></i><span>Tambah Tugas</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL TASK -->
+<div class="wp-modal-overlay" id="taskOverlay">
+    <div class="wp-modal">
+        <div class="wp-modal-header">
+            <h3 class="wp-modal-title" id="taskModalTitle">Tambah Tugas</h3>
+            <button class="wp-modal-close" onclick="closeTask()"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="wp-modal-body">
+            <input type="hidden" id="taskEditId">
+            <div class="wp-form-group">
+                <label class="wp-form-label">Nama Tugas <span class="req">*</span></label>
+                <input type="text" class="wp-input" id="taskName" placeholder="Contoh: PR Matematika Hal. 45">
+            </div>
+            <div class="wp-form-group">
+                <label class="wp-form-label">Deskripsi</label>
+                <input type="text" class="wp-input" id="taskDesc" placeholder="Detail tugas (opsional)">
+            </div>
+            <div class="wp-form-row">
+                <div class="wp-form-group">
+                    <label class="wp-form-label">Tanggal <span class="req">*</span></label>
+                    <input type="date" class="wp-input" id="taskDate">
+                </div>
+                <div class="wp-form-group">
+                    <label class="wp-form-label">Prioritas</label>
+                    <select class="wp-select" id="taskPriority">
+                        <option value="low">Rendah</option>
+                        <option value="medium" selected>Sedang</option>
+                        <option value="high">Tinggi</option>
+                    </select>
+                </div>
+            </div>
+            <div class="wp-form-group">
+                <label class="wp-form-label">Mata Pelajaran</label>
+                <input type="text" class="wp-input" id="taskSubject" placeholder="Contoh: Matematika">
+            </div>
+        </div>
+        <div class="wp-modal-footer">
+            <button class="wp-btn wp-btn-ghost" onclick="closeTask()">Batal</button>
+            <button class="wp-btn wp-btn-primary" onclick="saveTask()">
+                <i class="fas fa-save"></i><span>Simpan</span>
+            </button>
+        </div>
+    </div>
+</div>
+
+<div class="wp-toast-container" id="toastContainer"></div>
+
+<script>
+// State
+let currentMonth = new Date().getMonth();
+let currentYear = new Date().getFullYear();
+let selectedDate = new Date();
+
+// Load tasks
+let tasks = JSON.parse(localStorage.getItem('jadwalku_tasks') || 'null');
+if (!tasks) {
+    const today = new Date();
+    const fmt = (d) => d.toISOString().split('T')[0];
+    const tomorrow = new Date(today); tomorrow.setDate(today.getDate() + 1);
+    const nextWeek = new Date(today); nextWeek.setDate(today.getDate() + 5);
+    tasks = [
+        { id: 1, name: 'PR Matematika Hal. 45', desc: 'Soal 1-10', date: fmt(tomorrow), priority: 'high', subject: 'Matematika', done: false },
+        { id: 2, name: 'Essay B. Indonesia', desc: 'Min 500 kata', date: fmt(nextWeek), priority: 'medium', subject: 'B. Indonesia', done: false },
+        { id: 3, name: 'Hafalan Surah', desc: 'Surah Al-Mulk', date: fmt(today), priority: 'low', subject: 'Agama', done: false },
+    ];
+    localStorage.setItem('jadwalku_tasks', JSON.stringify(tasks));
+}
+
+function showToast(title, msg, type = 'info') {
+    const container = document.getElementById('toastContainer');
+    const icons = { info: 'fa-info', success: 'fa-check', error: 'fa-exclamation' };
+    const toast = document.createElement('div');
+    toast.className = 'wp-toast ' + type;
+    toast.innerHTML = `
+        <div class="wp-toast-icon"><i class="fas ${icons[type]}"></i></div>
+        <div><div class="wp-toast-title">${title}</div><div class="wp-toast-msg">${msg}</div></div>
+    `;
+    container.appendChild(toast);
+    setTimeout(() => toast.remove(), 3000);
+}
+
+function toggleSidebar() { document.getElementById('wpSidebar').classList.toggle('open'); }
+function toggleTheme() {
+    document.body.classList.toggle('dark-mode');
+    const isDark = document.body.classList.contains('dark-mode');
+    localStorage.setItem('jadwalku_dark', isDark ? '1' : '0');
+    document.getElementById('themeBtn').innerHTML = isDark ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+}
+if (localStorage.getItem('jadwalku_dark') === '1') {
+    document.body.classList.add('dark-mode');
+    document.addEventListener('DOMContentLoaded', () => {
+        document.getElementById('themeBtn').innerHTML = '<i class="fas fa-sun"></i>';
+    });
+}
+
+function fmtDate(d) {
+    return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+}
+
+const MONTHS = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+    'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+const DAY_NAMES = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+
+function renderCalendar() {
+    document.getElementById('taskMonthLabel').textContent = MONTHS[currentMonth] + ' ' + currentYear;
+    
+    const firstDay = new Date(currentYear, currentMonth, 1).getDay();
+    const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+    const today = new Date();
+    const todayStr = fmtDate(today);
+    const selectedStr = fmtDate(selectedDate);
+    
+    let html = '';
+    for (let i = 0; i < firstDay; i++) {
+        html += '<div class="wp-cal-cell empty"></div>';
+    }
+    for (let d = 1; d <= daysInMonth; d++) {
+        const date = new Date(currentYear, currentMonth, d);
+        const dateStr = fmtDate(date);
+        const dayOfWeek = date.getDay();
+        const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
+        const isToday = dateStr === todayStr;
+        const isSelected = dateStr === selectedStr;
+        const taskCount = tasks.filter(t => t.date === dateStr).length;
+        
+        let cls = 'wp-cal-cell';
+        if (isWeekend) cls += ' weekend';
+        if (isToday) cls += ' today';
+        if (isSelected) cls += ' selected';
+        if (taskCount > 0) cls += ' has-task';
+        
+        html += `
+            <div class="${cls}" onclick="selectDate('${dateStr}')">
+                ${d}
+                ${taskCount > 0 ? `<span class="wp-cal-task-badge">${taskCount}</span>` : ''}
+            </div>
+        `;
+    }
+    document.getElementById('taskCalGrid').innerHTML = html;
+}
+
+function selectDate(dateStr) {
+    const parts = dateStr.split('-');
+    selectedDate = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
+    renderCalendar();
+    renderTaskList();
+}
+
+function changeTaskMonth(delta) {
+    currentMonth += delta;
+    if (currentMonth > 11) { currentMonth = 0; currentYear++; }
+    if (currentMonth < 0) { currentMonth = 11; currentYear--; }
+    renderCalendar();
+}
+
+function goToTaskToday() {
+    selectedDate = new Date();
+    currentMonth = selectedDate.getMonth();
+    currentYear = selectedDate.getFullYear();
+    renderCalendar();
+    renderTaskList();
+}
+
+function renderTaskList() {
+    const dateStr = fmtDate(selectedDate);
+    const dayName = DAY_NAMES[selectedDate.getDay()];
+    const day = selectedDate.getDate();
+    const month = MONTHS[selectedDate.getMonth()];
+    const year = selectedDate.getFullYear();
+    
+    document.getElementById('taskPanelDate').textContent = `${day} ${month} ${year}`;
+    document.getElementById('taskPanelDay').textContent = dayName;
+    
+    const dayTasks = tasks.filter(t => t.date === dateStr);
+    const list = document.getElementById('taskList');
+    
+    if (dayTasks.length === 0) {
+        list.innerHTML = `<div class="wp-task-empty"><i class="fas fa-clipboard-check"></i>Belum ada tugas untuk tanggal ini</div>`;
+    } else {
+        const priorityLabel = { high: 'Tinggi', medium: 'Sedang', low: 'Rendah' };
+        list.innerHTML = dayTasks.map(t => `
+            <div class="wp-task-item ${t.done ? 'done' : ''} priority-${t.priority}">
+                <div class="wp-task-check" onclick="toggleTask(${t.id})">
+                    <i class="fas fa-check"></i>
+                </div>
+                <div class="wp-task-content">
+                    <div class="wp-task-name">${t.name}</div>
+                    ${t.desc ? `<div class="wp-task-desc">${t.desc}</div>` : ''}
+                    <div class="wp-task-meta">
+                        <span><i class="fas fa-book"></i> ${t.subject || '-'}</span>
+                        <span><i class="fas fa-flag"></i> ${priorityLabel[t.priority]}</span>
+                    </div>
+                </div>
+                <div class="wp-task-actions">
+                    <button class="wp-iconbtn" onclick="editTask(${t.id})"><i class="fas fa-pen"></i></button>
+                    <button class="wp-iconbtn delete" onclick="deleteTask(${t.id})"><i class="fas fa-trash"></i></button>
+                </div>
+            </div>
+        `).join('');
+    }
+    
+    document.getElementById('taskStatTotal').textContent = dayTasks.length;
+    document.getElementById('taskStatPending').textContent = dayTasks.filter(t => !t.done).length;
+    document.getElementById('taskStatDone').textContent = dayTasks.filter(t => t.done).length;
+    
+    document.getElementById('navTaskCount').textContent = tasks.filter(t => !t.done).length;
+}
+
+function openTask() {
+    document.getElementById('taskEditId').value = '';
+    document.getElementById('taskName').value = '';
+    document.getElementById('taskDesc').value = '';
+    document.getElementById('taskDate').value = fmtDate(selectedDate);
+    document.getElementById('taskPriority').value = 'medium';
+    document.getElementById('taskSubject').value = '';
+    document.getElementById('taskModalTitle').textContent = 'Tambah Tugas';
+    document.getElementById('taskOverlay').classList.add('show');
+}
+
+function editTask(id) {
+    const t = tasks.find(x => x.id === id);
+    if (!t) return;
+    document.getElementById('taskEditId').value = id;
+    document.getElementById('taskName').value = t.name;
+    document.getElementById('taskDesc').value = t.desc || '';
+    document.getElementById('taskDate').value = t.date;
+    document.getElementById('taskPriority').value = t.priority;
+    document.getElementById('taskSubject').value = t.subject || '';
+    document.getElementById('taskModalTitle').textContent = 'Edit Tugas';
+    document.getElementById('taskOverlay').classList.add('show');
+}
+
+function closeTask() {
+    document.getElementById('taskOverlay').classList.remove('show');
+}
+
+function saveTask() {
+    const id = document.getElementById('taskEditId').value;
+    const name = document.getElementById('taskName').value.trim();
+    const desc = document.getElementById('taskDesc').value.trim();
+    const date = document.getElementById('taskDate').value;
+    const priority = document.getElementById('taskPriority').value;
+    const subject = document.getElementById('taskSubject').value.trim();
+    
+    if (!name || !date) {
+        showToast('Error', 'Nama dan tanggal wajib diisi', 'error');
+        return;
+    }
+    
+    if (id) {
+        const t = tasks.find(x => x.id == id);
+        Object.assign(t, { name, desc, date, priority, subject });
+        showToast('Berhasil', 'Tugas diperbarui', 'success');
+    } else {
+        tasks.push({ id: Date.now(), name, desc, date, priority, subject, done: false });
+        showToast('Berhasil', 'Tugas ditambahkan', 'success');
+    }
+    
+    localStorage.setItem('jadwalku_tasks', JSON.stringify(tasks));
+    renderCalendar();
+    renderTaskList();
+    closeTask();
+}
+
+function toggleTask(id) {
+    const t = tasks.find(x => x.id === id);
+    if (t) {
+        t.done = !t.done;
+        localStorage.setItem('jadwalku_tasks', JSON.stringify(tasks));
+        renderTaskList();
+        if (t.done) showToast('Selesai', 'Tugas ditandai selesai', 'success');
+    }
+}
+
+function deleteTask(id) {
+    if (!confirm('Yakin ingin menghapus tugas ini?')) return;
+    tasks = tasks.filter(t => t.id !== id);
+    localStorage.setItem('jadwalku_tasks', JSON.stringify(tasks));
+    renderCalendar();
+    renderTaskList();
+    showToast('Berhasil', 'Tugas dihapus', 'success');
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const userName = localStorage.getItem('jadwalku_username') || 'User';
+    document.getElementById('userName').textContent = userName;
+    document.getElementById('userAvatar').textContent = userName.charAt(0).toUpperCase();
+    renderCalendar();
+    renderTaskList();
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jadwal Piket - JadwalKu</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+    --primary: #4f46e5; --primary-dark: #4338ca; --primary-light: #eef2ff; --primary-lighter: #f5f7ff;
+    --purple: #9333ea; --purple-light: #faf5ff; --green: #10b981; --green-light: #ecfdf5;
+    --orange: #f59e0b; --orange-light: #fffbeb; --red: #ef4444; --red-light: #fef2f2;
+    --bg: #f8fafc; --white: #ffffff;
+    --gray-50: #f9fafb; --gray-100: #f3f4f6; --gray-200: #e5e7eb; --gray-300: #d1d5db;
+    --gray-400: #9ca3af; --gray-500: #6b7280; --gray-600: #4b5563;
+    --text: #111827; --text-light: #4b5563; --text-muted: #6b7280;
+    --border: #e5e7eb; --border-dark: #d1d5db;
+    --shadow-xs: 0 1px 2px rgba(0,0,0,0.04);
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+    --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Inter', sans-serif;
+    --sidebar-width: 240px; --topbar-height: 56px;
+    --radius-md: 10px; --radius-lg: 14px;
+}
+body.dark-mode {
+    --bg: #0f172a; --white: #1e293b; --gray-50: #1a2332; --gray-100: #233044;
+    --gray-200: #334155; --gray-300: #475569; --gray-600: #cbd5e1;
+    --text: #f1f5f9; --text-light: #cbd5e1; --text-muted: #94a3b8;
+    --border: #334155; --border-dark: #475569;
+    --primary-light: #1e3a8a; --primary-lighter: #1e293b;
+    --green-light: #064e3b; --red-light: #7f1d1d; --orange-light: #78350f; --purple-light: #4c1d95;
+}
+body { font-family: var(--font-sans); background: var(--bg); color: var(--text);
+    line-height: 1.5; font-size: 14px; min-height: 100vh; }
+.wp-layout { display: flex; min-height: 100vh; }
+.wp-sidebar { width: var(--sidebar-width);
+    background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%); color: #f1f5f9;
+    position: fixed; top: 0; left: 0; height: 100vh; display: flex;
+    flex-direction: column; z-index: 100; overflow-y: auto;
+    box-shadow: 4px 0 20px rgba(0,0,0,0.08); transition: transform 0.3s; }
+.wp-sidebar-header { padding: 20px 22px; border-bottom: 1px solid rgba(255,255,255,0.06);
+    display: flex; align-items: center; gap: 12px; cursor: pointer; }
+.wp-sidebar-header:hover { background: rgba(255,255,255,0.04); }
+.wp-logo-mark { width: 38px; height: 38px;
+    background: linear-gradient(135deg, #6366f1, #a855f7); border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    color: #fff; font-size: 17px; box-shadow: 0 4px 12px rgba(99,102,241,0.4); }
+.wp-logo-text h1 { font-size: 15px; font-weight: 700; color: #fff; line-height: 1.2; }
+.wp-logo-text span { font-size: 10px; color: #64748b; letter-spacing: 0.5px;
+    text-transform: uppercase; font-weight: 600; }
+.wp-sidebar-user { padding: 16px 22px; border-bottom: 1px solid rgba(255,255,255,0.06);
+    display: flex; align-items: center; gap: 12px; }
+.wp-sidebar-avatar { width: 40px; height: 40px; border-radius: 50%;
+    background: linear-gradient(135deg, #6366f1, #a855f7); color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 15px; font-weight: 700; }
+.wp-sidebar-user-info { flex: 1; min-width: 0; }
+.wp-sidebar-user-name { font-size: 13px; font-weight: 600; color: #fff; margin-bottom: 2px;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.wp-sidebar-user-role { font-size: 11px; color: #64748b; }
+.wp-nav { flex: 1; padding: 12px 0; }
+.wp-nav-section { padding: 16px 22px 8px; font-size: 10px; font-weight: 700;
+    color: #475569; text-transform: uppercase; letter-spacing: 1px; }
+.wp-nav-item { display: flex; align-items: center; gap: 12px; padding: 11px 22px;
+    color: #cbd5e1; text-decoration: none; font-size: 13.5px; font-weight: 500;
+    cursor: pointer; transition: all 0.2s ease; margin: 2px 10px; border-radius: 8px; }
+.wp-nav-item:hover { background: rgba(255,255,255,0.06); color: #fff; transform: translateX(2px); }
+.wp-nav-item.active { background: linear-gradient(135deg, rgba(99,102,241,0.9), rgba(168,85,247,0.9));
+    color: #fff; font-weight: 600; box-shadow: 0 6px 20px rgba(99,102,241,0.4); }
+.wp-nav-item i { width: 20px; text-align: center; font-size: 15px; }
+.wp-nav-item .wp-nav-count { margin-left: auto; background: rgba(255,255,255,0.12);
+    color: #e2e8f0; font-size: 10px; font-weight: 700; padding: 2px 8px;
+    border-radius: 10px; min-width: 22px; text-align: center; }
+.wp-nav-item.active .wp-nav-count { background: rgba(255,255,255,0.25); color: #fff; }
+.wp-sidebar-footer { padding: 16px 22px; border-top: 1px solid rgba(255,255,255,0.06);
+    font-size: 11px; color: #64748b; }
+.wp-main { flex: 1; margin-left: var(--sidebar-width); min-width: 0;
+    display: flex; flex-direction: column; min-height: 100vh;
+    width: calc(100% - var(--sidebar-width)); }
+.wp-topbar { background: rgba(255,255,255,0.85); backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border); padding: 0 32px;
+    height: var(--topbar-height); display: flex; align-items: center;
+    justify-content: space-between; position: sticky; top: 0; z-index: 50; }
+body.dark-mode .wp-topbar { background: rgba(30,41,59,0.85); }
+.wp-topbar-left { display: flex; align-items: center; gap: 14px; }
+.wp-menu-toggle { display: none; background: none; border: none;
+    color: var(--text); font-size: 18px; cursor: pointer; padding: 8px; border-radius: 8px; }
+.wp-breadcrumb { display: flex; align-items: center; gap: 8px;
+    font-size: 13px; color: var(--text-muted); }
+.wp-breadcrumb a { color: var(--primary); text-decoration: none; cursor: pointer;
+    padding: 4px 8px; border-radius: 6px; }
+.wp-breadcrumb a:hover { background: var(--primary-light); }
+.wp-breadcrumb .sep { color: var(--gray-400); font-size: 9px; }
+.wp-breadcrumb-current { color: var(--text); font-weight: 600; }
+.wp-topbar-right { display: flex; align-items: center; gap: 6px; }
+.wp-topbar-btn { width: 36px; height: 36px; background: none; border: none;
+    border-radius: 8px; cursor: pointer; color: var(--text-light);
+    font-size: 15px; display: flex; align-items: center;
+    justify-content: center; transition: all 0.15s ease; }
+.wp-topbar-btn:hover { background: var(--primary-light); color: var(--primary); }
+.wp-content { padding: 28px 32px; flex: 1; }
+.wp-page-header { display: flex; align-items: flex-start;
+    justify-content: space-between; gap: 16px; margin-bottom: 24px; flex-wrap: wrap; }
+.wp-page-title { font-size: 26px; font-weight: 700; color: var(--text);
+    line-height: 1.2; margin-bottom: 4px; letter-spacing: -0.5px; }
+.wp-page-subtitle { font-size: 13px; color: var(--text-muted); }
+.wp-btn { display: inline-flex; align-items: center; justify-content: center;
+    gap: 7px; padding: 9px 16px; font-family: var(--font-sans); font-size: 13px;
+    font-weight: 600; border-radius: 8px; cursor: pointer;
+    transition: all 0.2s ease; text-decoration: none; border: 1px solid;
+    white-space: nowrap; min-height: 36px; }
+.wp-btn-primary { background: linear-gradient(135deg, #4f46e5, #7c3aed);
+    color: #fff; border-color: transparent; box-shadow: 0 4px 14px rgba(79,70,229,0.3); }
+.wp-btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(79,70,229,0.4); }
+.wp-btn-ghost { background: var(--white); color: var(--text-light); border-color: var(--border); }
+.wp-btn-ghost:hover { background: var(--gray-50); color: var(--primary); border-color: var(--primary); }
+.wp-notice { display: flex; align-items: flex-start; gap: 12px;
+    padding: 14px 16px; background: linear-gradient(135deg, var(--primary-lighter), var(--white));
+    border: 1px solid var(--border); border-left: 4px solid var(--primary);
+    border-radius: 10px; margin-bottom: 20px; box-shadow: var(--shadow-xs); }
+.wp-notice-icon { color: var(--primary); font-size: 18px; margin-top: 1px; }
+.wp-notice-body { flex: 1; font-size: 13px; color: var(--text-light); line-height: 1.6; }
+.wp-notice-body strong { color: var(--text); }
+.wp-piket-grid { display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(310px, 1fr)); gap: 18px; }
+.wp-piket-card { background: var(--white); border: 1px solid var(--border);
+    border-radius: var(--radius-md); overflow: hidden; box-shadow: var(--shadow-xs);
+    transition: all 0.25s ease; }
+.wp-piket-card:hover { box-shadow: 0 10px 28px rgba(0,0,0,0.08);
+    transform: translateY(-3px); border-color: transparent; }
+.wp-piket-card.today { border-color: var(--primary);
+    box-shadow: 0 0 0 3px var(--primary-light), 0 10px 24px rgba(79,70,229,0.15); }
+.wp-piket-header { background: linear-gradient(135deg, var(--gray-50), var(--gray-100));
+    padding: 14px 18px; border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.wp-piket-card.today .wp-piket-header {
+    background: linear-gradient(135deg, #4f46e5, #7c3aed);
+    border-bottom-color: transparent; color: #fff; }
+.wp-piket-day { font-size: 14px; font-weight: 700; color: var(--text);
+    display: flex; align-items: center; gap: 8px; }
+.wp-piket-card.today .wp-piket-day { color: #fff; }
+.wp-piket-today-tag { font-size: 9px; font-weight: 800;
+    background: rgba(255,255,255,0.25); color: #fff; padding: 3px 8px;
+    border-radius: 50px; letter-spacing: 0.5px; }
+.wp-piket-count { font-size: 11px; font-weight: 700; color: var(--text-muted);
+    background: var(--white); padding: 3px 10px; border-radius: 50px; }
+.wp-piket-card.today .wp-piket-count { background: rgba(255,255,255,0.25); color: #fff; }
+.wp-piket-body { padding: 14px 18px; }
+.wp-piket-person { display: flex; align-items: center; gap: 12px;
+    padding: 10px 0; border-bottom: 1px dashed var(--border); }
+.wp-piket-person:last-child { border-bottom: none; padding-bottom: 0; }
+.wp-piket-person:first-child { padding-top: 0; }
+.wp-piket-avatar { width: 38px; height: 38px; border-radius: 50%;
+    background: linear-gradient(135deg, #4f46e5, #a855f7); color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; font-weight: 700; flex-shrink: 0;
+    box-shadow: 0 4px 10px rgba(79,70,229,0.25); }
+.wp-piket-info { flex: 1; min-width: 0; }
+.wp-piket-name { font-size: 13.5px; font-weight: 700; margin-bottom: 2px; color: var(--text); }
+.wp-piket-task { font-size: 11.5px; color: var(--text-muted); }
+.wp-piket-actions { display: flex; gap: 5px; }
+.wp-iconbtn { width: 28px; height: 28px; border: 1px solid var(--border);
+    background: var(--white); border-radius: 6px; display: flex;
+    align-items: center; justify-content: center; cursor: pointer;
+    color: var(--text-muted); font-size: 11px; transition: all 0.2s ease; }
+.wp-iconbtn:hover { background: var(--primary); color: #fff;
+    border-color: var(--primary); transform: scale(1.1); }
+.wp-iconbtn.delete:hover { background: var(--red); border-color: var(--red); }
+.wp-piket-add { width: 100%; padding: 10px; background: transparent;
+    border: 1.5px dashed var(--border-dark); border-radius: 8px;
+    color: var(--text-muted); font-size: 12px; font-weight: 700;
+    cursor: pointer; transition: all 0.2s ease; margin-top: 10px;
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+    font-family: var(--font-sans); }
+.wp-piket-add:hover { background: linear-gradient(135deg, var(--primary-light), var(--purple-light));
+    border-color: var(--primary); color: var(--primary); border-style: solid; }
+.wp-piket-empty { text-align: center; padding: 24px 12px;
+    color: var(--text-muted); font-size: 12.5px; }
+.wp-piket-empty i { display: block; font-size: 28px; margin-bottom: 10px; opacity: 0.3; }
+.wp-modal-overlay { position: fixed; inset: 0; background: rgba(15,23,42,0.6);
+    backdrop-filter: blur(6px); z-index: 1000; display: none;
+    align-items: center; justify-content: center; padding: 20px; }
+.wp-modal-overlay.show { display: flex; }
+.wp-modal { background: var(--white); border-radius: var(--radius-lg);
+    width: 100%; max-width: 500px; max-height: 90vh; overflow-y: auto;
+    box-shadow: 0 25px 60px rgba(0,0,0,0.25);
+    animation: wpModalIn 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+@keyframes wpModalIn {
+    from { opacity: 0; transform: translateY(-20px) scale(0.96); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+.wp-modal-header { padding: 20px 24px; border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between; }
+.wp-modal-title { font-size: 17px; font-weight: 700; }
+.wp-modal-close { width: 32px; height: 32px; background: var(--gray-100);
+    border: none; border-radius: 8px; cursor: pointer; color: var(--text-muted);
+    font-size: 14px; display: flex; align-items: center;
+    justify-content: center; transition: all 0.2s ease; }
+.wp-modal-close:hover { background: var(--red-light); color: var(--red); transform: rotate(90deg); }
+.wp-modal-body { padding: 24px; }
+.wp-modal-footer { padding: 16px 24px; border-top: 1px solid var(--border);
+    background: var(--gray-50); display: flex; gap: 10px; justify-content: flex-end; }
+.wp-form-group { margin-bottom: 16px; }
+.wp-form-label { display: block; font-size: 12.5px; font-weight: 700;
+    margin-bottom: 7px; color: var(--text); }
+.wp-form-label .req { color: var(--red); }
+.wp-input, .wp-select { width: 100%; padding: 10px 14px;
+    border: 1.5px solid var(--border); border-radius: 8px;
+    font-family: var(--font-sans); font-size: 13.5px; color: var(--text);
+    background: var(--white); outline: none; transition: all 0.2s ease; min-height: 40px; }
+.wp-input:focus, .wp-select:focus { border-color: var(--primary);
+    box-shadow: 0 0 0 4px var(--primary-light); }
+.wp-toast-container { position: fixed; top: 70px; right: 24px;
+    z-index: 2000; display: flex; flex-direction: column; gap: 10px; }
+.wp-toast { display: flex; align-items: center; gap: 12px;
+    padding: 14px 18px; background: var(--white); border: 1px solid var(--border);
+    border-left: 4px solid var(--primary); border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.12); min-width: 280px;
+    animation: wpToastIn 0.35s cubic-bezier(0.4, 0, 0.2, 1); font-size: 13.5px; }
+@keyframes wpToastIn {
+    from { opacity: 0; transform: translateX(40px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+.wp-toast.success { border-left-color: var(--green); }
+.wp-toast.error { border-left-color: var(--red); }
+.wp-toast-icon { width: 26px; height: 26px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    color: #fff; font-size: 11px; flex-shrink: 0; }
+.wp-toast.info .wp-toast-icon { background: linear-gradient(135deg, #4f46e5, #6366f1); }
+.wp-toast.success .wp-toast-icon { background: linear-gradient(135deg, #10b981, #34d399); }
+.wp-toast.error .wp-toast-icon { background: linear-gradient(135deg, #ef4444, #f87171); }
+.wp-toast-title { font-size: 13.5px; font-weight: 700; }
+.wp-toast-msg { font-size: 11.5px; color: var(--text-muted); margin-top: 2px; }
+@media (max-width: 768px) {
+    .wp-sidebar { transform: translateX(-100%); }
+    .wp-sidebar.open { transform: translateX(0); }
+    .wp-main { margin-left: 0; width: 100%; }
+    .wp-menu-toggle { display: flex; }
+    .wp-content { padding: 18px; }
+    .wp-topbar { padding: 0 18px; }
+    .wp-piket-grid { grid-template-columns: 1fr; }
+    .wp-toast-container { left: 16px; right: 16px; }
+    .wp-page-title { font-size: 22px; }
+}
+</style>
+</head>
+<body>
+
+<div class="wp-layout">
+    <aside class="wp-sidebar" id="wpSidebar">
+        <div class="wp-sidebar-header" onclick="location.href='index.html'">
+            <div class="wp-logo-mark"><i class="fas fa-calendar-alt"></i></div>
+            <div class="wp-logo-text">
+                <h1>JadwalKu</h1>
+                <span>Student Schedule</span>
+            </div>
+        </div>
+        <div class="wp-sidebar-user">
+            <div class="wp-sidebar-avatar" id="userAvatar">U</div>
+            <div class="wp-sidebar-user-info">
+                <div class="wp-sidebar-user-name" id="userName">User</div>
+                <div class="wp-sidebar-user-role">Siswa</div>
+            </div>
+        </div>
+        <nav class="wp-nav">
+            <div class="wp-nav-section">Menu Utama</div>
+            <a class="wp-nav-item" href="index.html">
+                <i class="fas fa-th-large"></i><span>Dashboard</span>
+            </a>
+            <a class="wp-nav-item" href="index.html#jadwal_pelajaran">
+                <i class="fas fa-calendar-alt"></i><span>Jadwal Pelajaran</span>
+            </a>
+            <a class="wp-nav-item active">
+                <i class="fas fa-broom"></i><span>Jadwal Piket</span>
+                <span class="wp-nav-count" id="navPiketCount">0</span>
+            </a>
+            <a class="wp-nav-item" href="penugasan.html">
+                <i class="fas fa-tasks"></i><span>Penugasan</span>
+                <span class="wp-nav-count">→</span>
+            </a>
+        </nav>
+        <div class="wp-sidebar-footer">
+            <div>JadwalKu v2.2</div>
+            <div style="margin-top:4px;">© 2024 · Bagian 2 dari 3</div>
+        </div>
+    </aside>
+
+    <div class="wp-main">
+        <div class="wp-topbar">
+            <div class="wp-topbar-left">
+                <button class="wp-menu-toggle" onclick="toggleSidebar()">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="wp-breadcrumb">
+                    <a href="index.html"><i class="fas fa-home" style="font-size:12px;"></i></a>
+                    <i class="fas fa-chevron-right sep"></i>
+                    <span class="wp-breadcrumb-current">Jadwal Piket</span>
+                </div>
+            </div>
+            <div class="wp-topbar-right">
+                <button class="wp-topbar-btn" onclick="toggleTheme()" id="themeBtn"><i class="fas fa-moon"></i></button>
+            </div>
+        </div>
+
+        <div class="wp-content">
+            <div class="wp-page-header">
+                <div>
+                    <h1 class="wp-page-title">Jadwal Piket Kelas</h1>
+                    <p class="wp-page-subtitle">Kelola petugas piket harian</p>
+                </div>
+                <button class="wp-btn wp-btn-primary" onclick="openPiket()">
+                    <i class="fas fa-plus"></i><span>Tambah Petugas</span>
+                </button>
+            </div>
+
+            <div class="wp-notice">
+                <i class="fas fa-info-circle wp-notice-icon"></i>
+                <div class="wp-notice-body">
+                    <strong>Informasi:</strong> Data piket tersimpan di browser Anda.
+                    Klik ikon pensil untuk mengubah, atau tombol tambah untuk menambah petugas baru.
+                </div>
+            </div>
+
+            <div class="wp-piket-grid" id="piketGrid"></div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL PIKET -->
+<div class="wp-modal-overlay" id="piketOverlay">
+    <div class="wp-modal">
+        <div class="wp-modal-header">
+            <h3 class="wp-modal-title" id="piketModalTitle">Tambah Petugas Piket</h3>
+            <button class="wp-modal-close" onclick="closePiket()"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="wp-modal-body">
+            <input type="hidden" id="piketEditId">
+            <div class="wp-form-group">
+                <label class="wp-form-label">Hari <span class="req">*</span></label>
+                <select class="wp-select" id="piketHari" required>
+                    <option value="">Pilih Hari</option>
+                    <option>Senin</option><option>Selasa</option><option>Rabu</option>
+                    <option>Kamis</option><option>Jumat</option><option>Sabtu</option>
+                </select>
+            </div>
+            <div class="wp-form-group">
+                <label class="wp-form-label">Nama Petugas <span class="req">*</span></label>
+                <input type="text" class="wp-input" id="piketNama" placeholder="Nama siswa">
+            </div>
+            <div class="wp-form-group">
+                <label class="wp-form-label">Tugas</label>
+                <input type="text" class="wp-input" id="piketTugas" placeholder="Contoh: Menyapu lantai">
+            </div>
+        </div>
+        <div class="wp-modal-footer">
+            <button class="wp-btn wp-btn-ghost" onclick="closePiket()">Batal</button>
+            <button class="wp-btn wp-btn-primary" onclick="savePiket()">
+                <i class="fas fa-save"></i><span>Simpan</span>
+            </button>
+        </div>
+    </div>
+</div>
+
+<div class="wp-toast-container" id="toastContainer"></div>
+
+<script>
+const DAYS = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+
+// Load piket data
+let piketData = JSON.parse(localStorage.getItem('jadwalku_piket') || 'null');
+if (!piketData) {
+    piketData = {
+        Senin: [
+            { id: 1, nama: 'Ahmad Fauzi', tugas: 'Menyapu lantai' },
+            { id: 2, nama: 'Siti Nurhaliza', tugas: 'Mengepel' }
+        ],
+        Selasa: [
+            { id: 3, nama: 'Budi Santoso', tugas: 'Membuang sampah' }
+        ],
+        Rabu: [],
+        Kamis: [],
+        Jumat: [],
+        Sabtu: []
+    };
+    localStorage.setItem('jadwalku_piket', JSON.stringify(piketData));
+}
+
+function showToast(title, msg, type = 'info') {
+    const container = document.getElementById('toastContainer');
+    const icons = { info: 'fa-info', success: 'fa-check', error: 'fa-exclamation' };
+    const toast = document.createElement('div');
+    toast.className = 'wp-toast ' + type;
+    toast.innerHTML = `
+        <div class="wp-toast-icon"><i class="fas ${icons[type]}"></i></div>
+        <div><div class="wp-toast-title">${title}</div><div class="wp-toast-msg">${msg}</div></div>
+    `;
+    container.appendChild(toast);
+    setTimeout(() => toast.remove(), 3000);
+}
+
+function toggleSidebar() { document.getElementById('wpSidebar').classList.toggle('open'); }
+function toggleTheme() {
+    document.body.classList.toggle('dark-mode');
+    const isDark = document.body.classList.contains('dark-mode');
+    localStorage.setItem('jadwalku_dark', isDark ? '1' : '0');
+    document.getElementById('themeBtn').innerHTML = isDark ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+}
+if (localStorage.getItem('jadwalku_dark') === '1') {
+    document.body.classList.add('dark-mode');
+    document.addEventListener('DOMContentLoaded', () => {
+        document.getElementById('themeBtn').innerHTML = '<i class="fas fa-sun"></i>';
+    });
+}
+
+function getTodayName() {
+    return ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'][new Date().getDay()];
+}
+
+function renderPiket() {
+    const grid = document.getElementById('piketGrid');
+    const today = getTodayName();
+    let total = 0;
+    
+    grid.innerHTML = DAYS.map(day => {
+        const people = piketData[day] || [];
+        total += people.length;
+        const isToday = day === today;
+        
+        let bodyHtml = '';
+        if (people.length === 0) {
+            bodyHtml = `<div class="wp-piket-empty"><i class="fas fa-user-slash"></i>Belum ada petugas</div>`;
+        } else {
+            bodyHtml = people.map(p => `
+                <div class="wp-piket-person">
+                    <div class="wp-piket-avatar">${p.nama.charAt(0).toUpperCase()}</div>
+                    <div class="wp-piket-info">
+                        <div class="wp-piket-name">${p.nama}</div>
+                        <div class="wp-piket-task">${p.tugas || 'Petugas Piket'}</div>
+                    </div>
+                    <div class="wp-piket-actions">
+                        <button class="wp-iconbtn" onclick="editPiket('${day}', ${p.id})" title="Edit">
+                            <i class="fas fa-pen"></i>
+                        </button>
+                        <button class="wp-iconbtn delete" onclick="deletePiket('${day}', ${p.id})" title="Hapus">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        return `
+            <div class="wp-piket-card ${isToday ? 'today' : ''}">
+                <div class="wp-piket-header">
+                    <div class="wp-piket-day">
+                        <i class="fas fa-calendar-day"></i>${day}
+                        ${isToday ? '<span class="wp-piket-today-tag">HARI INI</span>' : ''}
+                    </div>
+                    <div class="wp-piket-count">${people.length} orang</div>
+                </div>
+                <div class="wp-piket-body">
+                    ${bodyHtml}
+                    <button class="wp-piket-add" onclick="openPiket('${day}')">
+                        <i class="fas fa-plus"></i> Tambah Petugas
+                    </button>
+                </div>
+            </div>
+        `;
+    }).join('');
+    
+    document.getElementById('navPiketCount').textContent = total;
+}
+
+function openPiket(day) {
+    document.getElementById('piketEditId').value = '';
+    document.getElementById('piketHari').value = day || '';
+    document.getElementById('piketNama').value = '';
+    document.getElementById('piketTugas').value = '';
+    document.getElementById('piketModalTitle').textContent = 'Tambah Petugas Piket';
+    document.getElementById('piketOverlay').classList.add('show');
+}
+
+function editPiket(day, id) {
+    const p = (piketData[day] || []).find(x => x.id === id);
+    if (!p) return;
+    document.getElementById('piketEditId').value = id;
+    document.getElementById('piketHari').value = day;
+    document.getElementById('piketNama').value = p.nama;
+    document.getElementById('piketTugas').value = p.tugas || '';
+    document.getElementById('piketModalTitle').textContent = 'Edit Petugas Piket';
+    document.getElementById('piketOverlay').classList.add('show');
+}
+
+function closePiket() {
+    document.getElementById('piketOverlay').classList.remove('show');
+}
+
+function savePiket() {
+    const id = document.getElementById('piketEditId').value;
+    const hari = document.getElementById('piketHari').value;
+    const nama = document.getElementById('piketNama').value.trim();
+    const tugas = document.getElementById('piketTugas').value.trim();
+    
+    if (!hari || !nama) {
+        showToast('Error', 'Hari dan nama wajib diisi', 'error');
+        return;
+    }
+    
+    if (!piketData[hari]) piketData[hari] = [];
+    
+    if (id) {
+        // Edit
+        for (const d in piketData) {
+            const idx = piketData[d].findIndex(x => x.id == id);
+            if (idx !== -1) {
+                piketData[d].splice(idx, 1);
+                break;
+            }
+        }
+        piketData[hari].push({ id: parseInt(id), nama, tugas });
+        showToast('Berhasil', 'Petugas diperbarui', 'success');
+    } else {
+        // Add
+        const newId = Date.now();
+        piketData[hari].push({ id: newId, nama, tugas });
+        showToast('Berhasil', 'Petugas ditambahkan', 'success');
+    }
+    
+    localStorage.setItem('jadwalku_piket', JSON.stringify(piketData));
+    renderPiket();
+    closePiket();
+}
+
+function deletePiket(day, id) {
+    if (!confirm('Yakin ingin menghapus petugas ini?')) return;
+    piketData[day] = (piketData[day] || []).filter(p => p.id !== id);
+    localStorage.setItem('jadwalku_piket', JSON.stringify(piketData));
+    renderPiket();
+    showToast('Berhasil', 'Petugas dihapus', 'success');
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const userName = localStorage.getItem('jadwalku_username') || 'User';
+    document.getElementById('userName').textContent = userName;
+    document.getElementById('userAvatar').textContent = userName.charAt(0).toUpperCase();
+    renderPiket();
+});
+</script>
+</body>
+</html>
