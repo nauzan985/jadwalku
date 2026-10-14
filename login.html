@@ -3,149 +3,553 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Login - JadwalKu</title>
+<title>JadwalKu - Login</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<link rel="stylesheet" href="styles.css">
+<style>
+:root {
+    --primary: #2563eb;
+    --primary-dark: #1d4ed8;
+    --bg-soft: #f1f5f9;
+    --text: #0f172a;
+    --muted: #64748b;
+    --danger: #dc2626;
+    --success: #16a34a;
+}
+* { box-sizing: border-box; }
+body {
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    margin: 0;
+    color: var(--text);
+    background: #e2e8f0;
+}
+
+/* ===== LOGIN PAGE ===== */
+.login-page {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #2563eb, #7c3aed);
+    padding: 20px;
+}
+.login-box {
+    background: #fff;
+    padding: 32px;
+    border-radius: 16px;
+    box-shadow: 0 20px 50px rgba(0,0,0,.2);
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+    animation: fadeIn .4s ease;
+}
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+.login-logo {
+    font-size: 48px;
+    color: var(--primary);
+    margin-bottom: 8px;
+}
+.login-box h1 { margin: 0 0 4px; font-size: 26px; }
+.login-box > p { margin: 0 0 20px; color: var(--muted); font-size: 14px; }
+
+.login-error, .login-success {
+    display: none;
+    padding: 10px 14px;
+    border-radius: 8px;
+    margin-bottom: 16px;
+    font-size: 14px;
+    text-align: left;
+    align-items: center;
+    gap: 8px;
+}
+.login-error   { background: #fee2e2; color: var(--danger); }
+.login-success { background: #dcfce7; color: var(--success); }
+.login-error.show, .login-success.show { display: flex; }
+
+.wp-form-group { margin-bottom: 16px; text-align: left; }
+.wp-form-label {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 6px;
+}
+.wp-input {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1.5px solid #cbd5e1;
+    border-radius: 8px;
+    font-size: 15px;
+    outline: none;
+    transition: border-color .2s, box-shadow .2s;
+    font-family: inherit;
+}
+.wp-input:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(37,99,235,.15);
+}
+
+.wp-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 18px;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background .2s, transform .1s;
+    font-family: inherit;
+}
+.wp-btn:active { transform: scale(.98); }
+.wp-btn-primary { background: var(--primary); color: #fff; }
+.wp-btn-primary:hover { background: var(--primary-dark); }
+.wp-btn-outline {
+    background: transparent;
+    color: var(--primary);
+    border: 1.5px solid var(--primary);
+}
+.wp-btn-outline:hover { background: #eff6ff; }
+
+.login-hint {
+    margin-top: 18px;
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.6;
+}
+.login-hint code {
+    background: var(--bg-soft);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 12px;
+    color: var(--primary);
+}
+
+/* ===== DASHBOARD ===== */
+.dashboard-page {
+    display: none;
+    min-height: 100vh;
+    background: var(--bg-soft);
+    padding: 24px 16px;
+}
+.dashboard-page.active { display: block; }
+
+.dash-container {
+    max-width: 720px;
+    margin: 0 auto;
+}
+.dash-card {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 8px 24px rgba(0,0,0,.08);
+    padding: 28px;
+    animation: fadeIn .4s ease;
+}
+.dash-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #e2e8f0;
+}
+.dash-avatar {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #2563eb, #7c3aed);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+.dash-title h2 { margin: 0 0 4px; font-size: 20px; }
+.dash-title p  { margin: 0; color: var(--muted); font-size: 14px; }
+
+.dash-info {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 12px;
+    margin-bottom: 24px;
+}
+.info-item {
+    background: var(--bg-soft);
+    padding: 14px;
+    border-radius: 10px;
+}
+.info-item .label {
+    font-size: 12px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: .5px;
+    margin-bottom: 4px;
+}
+.info-item .value {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text);
+    word-break: break-word;
+}
+
+.dash-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+</style>
 </head>
-<body class="login-page">
+<body>
 
-<div class="login-box">
-    <div class="login-logo">
-        <i class="fas fa-calendar-alt"></i>
-    </div>
-    <h1>JadwalKu</h1>
-    <p>Masuk untuk melanjutkan</p>
+<!-- ============================================
+     HALAMAN LOGIN
+     ============================================ -->
+<div class="login-page" id="loginPage">
+    <div class="login-box" id="loginBox">
+        <div class="login-logo">
+            <i class="fas fa-calendar-alt"></i>
+        </div>
+        <h1>JadwalKu</h1>
+        <p>Masuk untuk melanjutkan</p>
 
-    <div class="login-error" id="loginError">
-        <i class="fas fa-exclamation-circle"></i>
-        <span id="loginErrorMsg">Terjadi kesalahan</span>
-    </div>
-
-    <form onsubmit="handleLogin(event)">
-        <div class="wp-form-group">
-            <label class="wp-form-label">
-                <i class="fas fa-user" style="color:var(--primary);margin-right:6px;"></i>
-                Username
-            </label>
-            <input
-                type="text"
-                class="wp-input"
-                id="loginUsername"
-                required
-                placeholder="Masukkan username"
-                autocomplete="username"
-                autofocus
-            >
+        <div class="login-error" id="loginError">
+            <i class="fas fa-exclamation-circle"></i>
+            <span id="loginErrorMsg">Terjadi kesalahan</span>
         </div>
 
-        <div class="wp-form-group">
-            <label class="wp-form-label">
-                <i class="fas fa-school" style="color:var(--primary);margin-right:6px;"></i>
-                Kelas
-            </label>
-            <input
-                type="text"
-                class="wp-input"
-                id="loginKelas"
-                placeholder="Contoh: XI IPA 1"
-                autocomplete="off"
-            >
+        <div class="login-success" id="loginSuccess">
+            <i class="fas fa-check-circle"></i>
+            <span id="loginSuccessMsg">Berhasil</span>
         </div>
 
-        <button type="submit" class="wp-btn wp-btn-primary" style="width:100%;margin-top:8px;min-height:44px;">
-            <i class="fas fa-sign-in-alt"></i>
-            <span>Masuk</span>
-        </button>
-    </form>
+        <form id="loginForm" onsubmit="handleLogin(event)">
+            <div class="wp-form-group">
+                <label class="wp-form-label">
+                    <i class="fas fa-user" style="color:var(--primary);margin-right:6px;"></i>
+                    Username
+                </label>
+                <input type="text" class="wp-input" id="loginUsername"
+                    required placeholder="Masukkan username"
+                    autocomplete="username" autofocus>
+            </div>
 
-    <div class="login-hint">
-        <i class="fas fa-info-circle"></i>
-        Demo: isi username apa saja untuk masuk
+            <div class="wp-form-group">
+                <label class="wp-form-label">
+                    <i class="fas fa-lock" style="color:var(--primary);margin-right:6px;"></i>
+                    Password
+                </label>
+                <input type="password" class="wp-input" id="loginPassword"
+                    required placeholder="Masukkan password"
+                    autocomplete="current-password">
+            </div>
+
+            <div class="wp-form-group">
+                <label class="wp-form-label">
+                    <i class="fas fa-school" style="color:var(--primary);margin-right:6px;"></i>
+                    Kelas
+                </label>
+                <input type="text" class="wp-input" id="loginKelas"
+                    placeholder="Contoh: XI IPA 1" autocomplete="off">
+            </div>
+
+            <button type="submit" class="wp-btn wp-btn-primary"
+                style="width:100%;margin-top:8px;min-height:44px;">
+                <i class="fas fa-sign-in-alt"></i>
+                <span>Masuk</span>
+            </button>
+        </form>
+
+        <div class="login-hint">
+            <i class="fas fa-info-circle"></i>
+            Demo akun:<br>
+            <code>admin / admin123</code> &nbsp;•&nbsp;
+            <code>siswa / siswa123</code> &nbsp;•&nbsp;
+            <code>budi / budi123</code>
+        </div>
     </div>
 </div>
 
-<script src="config.js"></script>
+<!-- ============================================
+     HALAMAN DASHBOARD
+     ============================================ -->
+<div class="dashboard-page" id="dashboardPage">
+    <div class="dash-container">
+        <div class="dash-card">
+            <div class="dash-header">
+                <div class="dash-avatar" id="dashAvatar">U</div>
+                <div class="dash-title">
+                    <h2>Selamat Datang, <span id="dashName">User</span>!</h2>
+                    <p id="dashSubtitle">-</p>
+                </div>
+            </div>
+
+            <div class="dash-info">
+                <div class="info-item">
+                    <div class="label">Username</div>
+                    <div class="value" id="infoUsername">-</div>
+                </div>
+                <div class="info-item">
+                    <div class="label">Role</div>
+                    <div class="value" id="infoRole">-</div>
+                </div>
+                <div class="info-item">
+                    <div class="label">Kelas</div>
+                    <div class="value" id="infoKelas">-</div>
+                </div>
+                <div class="info-item">
+                    <div class="label">Login Sejak</div>
+                    <div class="value" id="infoLogin">-</div>
+                </div>
+            </div>
+
+            <div class="dash-actions">
+                <button class="wp-btn wp-btn-outline" onclick="doLogout()">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
-    /* Redirect jika sudah login */
-    (function checkExistingSession() {
-        try {
-            const stored = localStorage.getItem(AUTH_CONFIG.storageKey);
-            if (stored) {
-                const user = JSON.parse(stored);
-                if (user && user.username) {
-                    window.location.replace(AUTH_CONFIG.homePage);
-                }
-            }
-        } catch (e) { /* ignore */ }
-    })();
+/* ============================================
+   KONFIGURASI
+   ============================================ */
+const AUTH_CONFIG = {
+    storageKey: 'jadwalku_session',
+    sessionDuration: 1000 * 60 * 60 * 24 // 24 jam
+};
 
-    function showLoginError(msg) {
-        const err = document.getElementById('loginError');
-        const msgEl = document.getElementById('loginErrorMsg');
-        if (err && msgEl) {
-            msgEl.textContent = msg;
-            err.classList.add('show');
-            setTimeout(() => err.classList.remove('show'), 3000);
-        }
-    }
+/* ============================================
+   DATABASE USER (Demo)
+   ⚠️ Produksi: gunakan backend + hashing (bcrypt)
+   ============================================ */
+const USER_DATABASE = [
+    { username: 'admin', password: 'admin123', name: 'Administrator', role: 'Admin',  kelas: '-' },
+    { username: 'siswa', password: 'siswa123', name: 'Siswa Demo',    role: 'Siswa',  kelas: 'XI IPA 1' },
+    { username: 'budi',  password: 'budi123',  name: 'Budi Santoso',  role: 'Siswa',  kelas: 'X IPA 2' }
+];
 
-    function handleLogin(e) {
-        e.preventDefault();
+/* ============================================
+   AUTH MODULE
+   ============================================ */
+const Auth = (function () {
 
-        const usernameInput = document.getElementById('loginUsername');
-        const kelasInput = document.getElementById('loginKelas');
-
-        const username = usernameInput.value.trim();
-        const kelas = kelasInput.value.trim() || 'XI IPA 1';
-
-        if (!username) {
-            showLoginError('Username wajib diisi');
-            usernameInput.focus();
-            return;
-        }
-
-        if (username.length < 3) {
-            showLoginError('Username minimal 3 karakter');
-            usernameInput.focus();
-            return;
-        }
-
-        // Buat objek user
-        const user = {
-            username: username.toLowerCase().replace(/\s+/g, '_'),
-            name: username,
-            kelas: kelas,
-            role: 'Siswa',
-            loginAt: new Date().toISOString()
+    function saveSession(user) {
+        const session = {
+            ...user,
+            loginAt: new Date().toISOString(),
+            expiresAt: Date.now() + AUTH_CONFIG.sessionDuration
         };
+        localStorage.setItem(AUTH_CONFIG.storageKey, JSON.stringify(session));
+    }
 
+    function getUser() {
         try {
-            // Simpan sesi
-            localStorage.setItem(AUTH_CONFIG.storageKey, JSON.stringify(user));
-
-            // Animasi keluar
-            document.querySelector('.login-box').style.transition = 'all 0.4s ease';
-            document.querySelector('.login-box').style.opacity = '0';
-            document.querySelector('.login-box').style.transform = 'translateY(-20px) scale(0.95)';
-
-            // Redirect ke dashboard
-            setTimeout(() => {
-                window.location.replace(AUTH_CONFIG.homePage);
-            }, 400);
-
-        } catch (err) {
-            console.error('Login error:', err);
-            showLoginError('Gagal menyimpan sesi: ' + err.message);
+            const raw = localStorage.getItem(AUTH_CONFIG.storageKey);
+            if (!raw) return null;
+            const session = JSON.parse(raw);
+            if (!session || !session.username) return null;
+            if (session.expiresAt && Date.now() > session.expiresAt) {
+                logout();
+                return null;
+            }
+            return session;
+        } catch (e) {
+            console.error('Auth.getUser error:', e);
+            return null;
         }
     }
 
-    // Enter key pada input kelas → submit
+    function isLoggedIn() {
+        return getUser() !== null;
+    }
+
+    function login(username, password, kelas) {
+        const uname = username.trim().toLowerCase();
+        const found = USER_DATABASE.find(u => u.username.toLowerCase() === uname);
+
+        if (!found) return { success: false, message: 'Username tidak ditemukan' };
+        if (found.password !== password) return { success: false, message: 'Password salah' };
+
+        const user = {
+            username: found.username,
+            name: found.name,
+            role: found.role,
+            kelas: kelas || found.kelas
+        };
+        saveSession(user);
+        return { success: true, user };
+    }
+
+    function logout() {
+        localStorage.removeItem(AUTH_CONFIG.storageKey);
+    }
+
+    return { login, logout, getUser, isLoggedIn };
+})();
+
+/* ============================================
+   UI HELPERS
+   ============================================ */
+function showError(msg) {
+    const el = document.getElementById('loginError');
+    document.getElementById('loginErrorMsg').textContent = msg;
+    el.classList.add('show');
+    clearTimeout(el._timer);
+    el._timer = setTimeout(() => el.classList.remove('show'), 3000);
+}
+
+function showSuccess(msg) {
+    const el = document.getElementById('loginSuccess');
+    document.getElementById('loginSuccessMsg').textContent = msg;
+    el.classList.add('show');
+}
+
+/* ============================================
+   LOGIN HANDLER
+   ============================================ */
+function handleLogin(e) {
+    e.preventDefault();
+
+    const usernameInput = document.getElementById('loginUsername');
+    const passwordInput = document.getElementById('loginPassword');
+    const kelasInput    = document.getElementById('loginKelas');
+
+    const username = usernameInput.value.trim();
+    const password = passwordInput.value;
+    const kelas    = kelasInput.value.trim() || 'XI IPA 1';
+
+    // Validasi
+    if (!username) {
+        showError('Username wajib diisi');
+        usernameInput.focus();
+        return;
+    }
+    if (username.length < 3) {
+        showError('Username minimal 3 karakter');
+        usernameInput.focus();
+        return;
+    }
+    if (!password) {
+        showError('Password wajib diisi');
+        passwordInput.focus();
+        return;
+    }
+    if (password.length < 4) {
+        showError('Password minimal 4 karakter');
+        passwordInput.focus();
+        return;
+    }
+
+    // Proses login
+    const result = Auth.login(username, password, kelas);
+
+    if (!result.success) {
+        showError(result.message);
+        passwordInput.value = '';
+        passwordInput.focus();
+        return;
+    }
+
+    // Sukses
+    showSuccess('Login berhasil! Mengalihkan...');
+
+    const box = document.getElementById('loginBox');
+    box.style.transition = 'all .4s ease';
+    box.style.opacity = '0';
+    box.style.transform = 'translateY(-20px) scale(.95)';
+
+    setTimeout(() => {
+        showDashboard();
+    }, 500);
+}
+
+/* ============================================
+   DASHBOARD
+   ============================================ */
+function showDashboard() {
+    const user = Auth.getUser();
+    if (!user) {
+        showLogin();
+        return;
+    }
+
+    // Isi data
+    document.getElementById('dashName').textContent    = user.name;
+    document.getElementById('dashSubtitle').textContent = `${user.role} • ${user.kelas}`;
+    document.getElementById('dashAvatar').textContent   = user.name.charAt(0).toUpperCase();
+    document.getElementById('infoUsername').textContent = user.username;
+    document.getElementById('infoRole').textContent     = user.role;
+    document.getElementById('infoKelas').textContent    = user.kelas;
+    document.getElementById('infoLogin').textContent    =
+        new Date(user.loginAt).toLocaleString('id-ID', {
+            day: '2-digit', month: 'short', year: 'numeric',
+            hour: '2-digit', minute: '2-digit'
+        });
+
+    // Toggle halaman
+    document.getElementById('loginPage').style.display = 'none';
+    document.getElementById('dashboardPage').classList.add('active');
+
+    // Update title
+    document.title = `Dashboard - JadwalKu`;
+}
+
+function showLogin() {
+    document.getElementById('dashboardPage').classList.remove('active');
+    document.getElementById('loginPage').style.display = 'flex';
+    document.title = 'JadwalKu - Login';
+
+    // Reset form & animasi
+    const box = document.getElementById('loginBox');
+    box.style.transition = 'none';
+    box.style.opacity = '1';
+    box.style.transform = 'none';
+    setTimeout(() => {
+        box.style.transition = 'all .4s ease';
+    }, 50);
+
+    document.getElementById('loginForm').reset();
+    document.getElementById('loginError').classList.remove('show');
+    document.getElementById('loginSuccess').classList.remove('show');
+    document.getElementById('loginUsername').focus();
+}
+
+/* ============================================
+   LOGOUT
+   ============================================ */
+function doLogout() {
+    if (!confirm('Yakin ingin logout?')) return;
+    Auth.logout();
+    showLogin();
+}
+
+/* ============================================
+   INISIALISASI
+   ============================================ */
+(function init() {
+    // Enter pada input kelas → submit
     document.getElementById('loginKelas').addEventListener('keypress', (e) => {
         if (e.key === 'Enter') {
             e.preventDefault();
-            document.querySelector('form').requestSubmit();
+            document.getElementById('loginForm').requestSubmit();
         }
     });
+
+    // Cek sesi aktif
+    if (Auth.isLoggedIn()) {
+        showDashboard();
+    } else {
+        showLogin();
+    }
+})();
 </script>
 </body>
 </html>
